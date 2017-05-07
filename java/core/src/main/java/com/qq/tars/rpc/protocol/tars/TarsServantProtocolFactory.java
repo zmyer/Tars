@@ -20,18 +20,22 @@ import com.qq.tars.net.protocol.ProtocolDecoder;
 import com.qq.tars.net.protocol.ProtocolEncoder;
 import com.qq.tars.net.protocol.ProtocolFactory;
 
+// TODO: 17/4/15 by zmyer
 public class TarsServantProtocolFactory implements ProtocolFactory {
-
+    //编码器对象
     private TarsCodec codec = null;
 
+    // TODO: 17/4/15 by zmyer
     public TarsServantProtocolFactory(TarsCodec codec) {
         this.codec = codec;
     }
 
+    // TODO: 17/4/15 by zmyer
     public ProtocolEncoder getEncoder() {
         return this.codec;
     }
 
+    // TODO: 17/4/15 by zmyer
     public ProtocolDecoder getDecoder() {
         return this.codec;
     }

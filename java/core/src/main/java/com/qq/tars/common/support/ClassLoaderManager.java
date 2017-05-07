@@ -19,23 +19,28 @@ package com.qq.tars.common.support;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: 17/4/15 by zmyer
 public class ClassLoaderManager {
-
+    //单例对象
     private static final ClassLoaderManager instance = new ClassLoaderManager();
-
+    //类加载映射表
     private Map<String, ClassLoader> classLoaders = new HashMap<String, ClassLoader>();
 
+    // TODO: 17/4/15 by zmyer
     private ClassLoaderManager() {
     }
 
+    // TODO: 17/4/15 by zmyer
     public static ClassLoaderManager getInstance() {
         return instance;
     }
 
+    // TODO: 17/4/15 by zmyer
     public ClassLoader getClassLoader(String contextName) {
         return this.classLoaders.get(contextName);
     }
 
+    // TODO: 17/4/15 by zmyer
     public void registerClassLoader(String contextName, ClassLoader classLoader) {
         this.classLoaders.put(contextName, classLoader);
     }

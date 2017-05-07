@@ -16,19 +16,19 @@
 
 package com.qq.tars.support.log;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.support.log.Logger.Level;
 import com.qq.tars.support.log.Logger.LogType;
 import com.qq.tars.support.log.prx.LogPrx;
 import com.qq.tars.support.log.util.Utils;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: 17/4/18 by zmyer
 public class LoggerFactory {
 
     private static final String LEVEL_NONE = "NONE";
@@ -58,6 +58,7 @@ public class LoggerFactory {
         start();
     }
 
+    // TODO: 17/4/18 by zmyer
     private static void loadLogConfCache() {
         String cacheLevel = LogConfCacheMngr.getInstance().getLevel();
         if (StringUtils.isEmpty(cacheLevel)) {
@@ -67,6 +68,7 @@ public class LoggerFactory {
         loadCacheLevel(cacheLevel, false);
     }
 
+    // TODO: 17/4/18 by zmyer
     private static void loadCacheLevel(String cacheLevel, boolean isNeedFreshMap) {
         if (LEVEL_NONE.equals(cacheLevel)) {
             isNone = true;
@@ -135,8 +137,10 @@ public class LoggerFactory {
 
     }
 
-    public synchronized static void config(Communicator communicator, String objName, String appName,
-                                           String serviceName, String defaultLevel, String defaultRoot) {
+    // TODO: 17/4/18 by zmyer
+    public synchronized static void config(Communicator communicator, String objName,
+        String appName,
+        String serviceName, String defaultLevel, String defaultRoot) {
         if (isInit) {
             return;
         }

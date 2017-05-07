@@ -19,19 +19,23 @@ package com.qq.tars.server.apps;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+// TODO: 17/4/15 by zmyer
 public class AppClassLoader extends URLClassLoader {
-
+    //app名称
     private String appName = null;
 
+    // TODO: 17/4/15 by zmyer
     public AppClassLoader(String appName, URL repositories[]) {
         super(repositories);
         this.appName = appName;
     }
 
+    // TODO: 17/4/15 by zmyer
     public AppClassLoader(URL repositories[], ClassLoader parent) {
         super(repositories, parent);
     }
 
+    // TODO: 17/4/15 by zmyer
     public String getAppName() {
         return this.appName;
     }

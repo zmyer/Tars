@@ -16,6 +16,7 @@
 
 package com.qq.tars.common.util;
 
+// TODO: 17/4/15 by zmyer
 public interface Constants {
 
     String SERVER_NODE_CACHE_FILENAME = "tarsnodes.dat";

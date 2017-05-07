@@ -20,63 +20,64 @@
 
 package com.qq.tars.support.stat.prx;
 
-import com.qq.tars.protocol.util.*;
-import com.qq.tars.protocol.annotation.*;
-import com.qq.tars.protocol.tars.*;
-import com.qq.tars.protocol.tars.annotation.*;
+import com.qq.tars.protocol.tars.TarsInputStream;
+import com.qq.tars.protocol.tars.TarsOutputStream;
+import com.qq.tars.protocol.tars.annotation.TarsStruct;
+import com.qq.tars.protocol.tars.annotation.TarsStructProperty;
+import com.qq.tars.protocol.util.TarsUtil;
 
 @TarsStruct
 public class ProxyInfo {
 
-	@TarsStructProperty(order = 0, isRequire = true)
-	public boolean bFromClient = false;
+    @TarsStructProperty(order = 0, isRequire = true)
+    public boolean bFromClient = false;
 
-	public boolean getBFromClient() {
-		return bFromClient;
-	}
+    public boolean getBFromClient() {
+        return bFromClient;
+    }
 
-	public void setBFromClient(boolean bFromClient) {
-		this.bFromClient = bFromClient;
-	}
+    public void setBFromClient(boolean bFromClient) {
+        this.bFromClient = bFromClient;
+    }
 
-	public ProxyInfo() {
-	}
+    public ProxyInfo() {
+    }
 
-	public ProxyInfo(boolean bFromClient) {
-		this.bFromClient = bFromClient;
-	}
+    public ProxyInfo(boolean bFromClient) {
+        this.bFromClient = bFromClient;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + TarsUtil.hashCode(bFromClient);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + TarsUtil.hashCode(bFromClient);
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof ProxyInfo)) {
-			return false;
-		}
-		ProxyInfo other = (ProxyInfo) obj;
-		return (
-			TarsUtil.equals(bFromClient, other.bFromClient) 
-		);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof ProxyInfo)) {
+            return false;
+        }
+        ProxyInfo other = (ProxyInfo) obj;
+        return (
+            TarsUtil.equals(bFromClient, other.bFromClient)
+        );
+    }
 
-	public void writeTo(TarsOutputStream _os) {
-		_os.write(bFromClient, 0);
-	}
+    public void writeTo(TarsOutputStream _os) {
+        _os.write(bFromClient, 0);
+    }
 
-	public void readFrom(TarsInputStream _is) {
-		this.bFromClient = _is.read(bFromClient, 0, true);
-	}
+    public void readFrom(TarsInputStream _is) {
+        this.bFromClient = _is.read(bFromClient, 0, true);
+    }
 
 }

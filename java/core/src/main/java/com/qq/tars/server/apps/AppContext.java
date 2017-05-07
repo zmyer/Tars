@@ -18,8 +18,10 @@ package com.qq.tars.server.apps;
 
 import java.io.File;
 
+// TODO: 17/4/15 by zmyer
 public final class AppContext extends AppContextImpl {
 
+    // TODO: 17/4/15 by zmyer
     public AppContext(String name, File path) {
         super(name, path);
     }

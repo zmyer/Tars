@@ -16,9 +16,6 @@
 
 package com.qq.tars.support.om;
 
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.client.CommunicatorFactory;
 import com.qq.tars.server.ServerVersion;
@@ -35,15 +32,20 @@ import com.qq.tars.support.property.JvmPropertyPolicy.MemoryHeapUsedAvg;
 import com.qq.tars.support.property.JvmPropertyPolicy.ThreadNumAvg;
 import com.qq.tars.support.property.PropertyReportHelper;
 import com.qq.tars.support.property.PropertyReportHelper.Policy;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
 
+// TODO: 17/4/15 by zmyer
 public class OmServiceMngr {
-
+    //单例对象
     private static final OmServiceMngr Instance = new OmServiceMngr();
 
+    // TODO: 17/4/15 by zmyer
     public static OmServiceMngr getInstance() {
         return Instance;
     }
 
+    // TODO: 17/4/15 by zmyer
     public void initAndStartOmService() {
         Communicator communicator = CommunicatorFactory.getInstance().getCommunicator();
         String app = ConfigurationManager.getInstance().getserverConfig().getApplication();
@@ -74,6 +76,7 @@ public class OmServiceMngr {
         ScheduledServiceMngr.getInstance().start();
     }
 
+    // TODO: 17/4/15 by zmyer
     public void reportWaitingTimeProperty(int value) {
         PropertyReportHelper.getInstance().reportPropertyValue(OmConstants.PropWaitTime, value);
     }

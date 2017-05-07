@@ -19,6 +19,7 @@ package com.qq.tars.rpc.common;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+// TODO: 17/4/15 by zmyer
 public interface ProtocolInvoker<T> {
 
     InvokeContext createContext(Object proxy, Method method, Object[] args) throws Exception;

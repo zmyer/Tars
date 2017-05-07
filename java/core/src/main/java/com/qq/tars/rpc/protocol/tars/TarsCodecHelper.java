@@ -16,15 +16,6 @@
 
 package com.qq.tars.rpc.protocol.tars;
 
-import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.qq.tars.common.support.ClassLoaderManager;
 import com.qq.tars.common.support.Holder;
 import com.qq.tars.common.util.CommonUtils;
@@ -41,11 +32,22 @@ import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.protocol.util.TarsUtil;
 import com.qq.tars.rpc.protocol.tars.support.AnalystManager;
 import com.qq.tars.rpc.protocol.tup.UniAttribute;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+// TODO: 17/4/15 by zmyer
 @SuppressWarnings("unchecked")
 public class TarsCodecHelper {
 
-    public static IoBuffer encodeRequest(TarsServantRequest request, Session session, String charsetName) throws ProtocolException {
+    // TODO: 17/4/15 by zmyer
+    public static IoBuffer encodeRequest(TarsServantRequest request, Session session, String charsetName)
+        throws ProtocolException {
         request.setCharsetName(charsetName);
         TarsOutputStream os = new TarsOutputStream();
         os.setServerEncoding(charsetName);
@@ -73,7 +75,9 @@ public class TarsCodecHelper {
         return IoBuffer.wrap(os.getByteBuffer());
     }
 
-    private static byte[] encodeRequestParams(TarsServantRequest request, String charsetName) throws ProtocolException {
+    // TODO: 17/4/15 by zmyer
+    private static byte[] encodeRequestParams(TarsServantRequest request, String charsetName)
+        throws ProtocolException {
         TarsOutputStream os = new TarsOutputStream(0);
         os.setServerEncoding(charsetName);
 
@@ -104,7 +108,8 @@ public class TarsCodecHelper {
         return os.toByteArray();
     }
 
-    public static Response decodeResponse(IoBuffer buffer, Session session, String charsetName) throws ProtocolException {
+    public static Response decodeResponse(IoBuffer buffer, Session session,
+        String charsetName) throws ProtocolException {
         if (buffer.remaining() < TarsHelper.HEAD_SIZE) {
             return null;
         }
@@ -176,7 +181,7 @@ public class TarsCodecHelper {
 
         TarsMethodInfo methodInfo = null;
         Map<Method, TarsMethodInfo> map = AnalystManager.getInstance().getMethodMap(request.getServantName());
-        for (Iterator<Entry<Method, TarsMethodInfo>> it = map.entrySet().iterator(); it.hasNext();) {
+        for (Iterator<Entry<Method, TarsMethodInfo>> it = map.entrySet().iterator(); it.hasNext(); ) {
             Entry<Method, TarsMethodInfo> entry = it.next();
             if (entry.getKey().getName().equals(request.getFunctionName())) {
                 methodInfo = entry.getValue();
@@ -202,7 +207,8 @@ public class TarsCodecHelper {
         return list.toArray();
     }
 
-    public static TarsServantRequest decodeRequest(IoBuffer buffer, Session session, String charsetName) throws ProtocolException {
+    public static TarsServantRequest decodeRequest(IoBuffer buffer, Session session,
+        String charsetName) throws ProtocolException {
         if (buffer.remaining() < 4) {
             return null;
         }

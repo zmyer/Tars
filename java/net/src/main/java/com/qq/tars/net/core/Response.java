@@ -21,6 +21,7 @@ import java.io.IOException;
 import com.qq.tars.net.client.ticket.Ticket;
 import com.qq.tars.net.protocol.ProtocolException;
 
+// TODO: 17/4/15 by zmyer
 public abstract class Response {
 
     private int ticketNum = Ticket.DEFAULT_TICKET_NUMBER;

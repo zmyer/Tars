@@ -22,19 +22,23 @@ import com.qq.tars.net.core.Response;
 import com.qq.tars.net.core.Session;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 
+// TODO: 17/4/15 by zmyer
 public class ServantProcessor extends Processor {
-
+    //创建处理器对象
     private TarsServantProcessor processor = new TarsServantProcessor();
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public Response process(Request request, Session session) {
-        Response response = null;
+        Response response;
 
         if (request instanceof TarsServantRequest) {
+            //开始处理请求对象
             response = processor.process(request, session);
         } else {
             throw new IllegalArgumentException("unknown request type.");
         }
+        //返回应答对象
         return response;
     }
 }

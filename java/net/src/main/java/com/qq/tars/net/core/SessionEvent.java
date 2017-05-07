@@ -16,13 +16,16 @@
 
 package com.qq.tars.net.core;
 
+// TODO: 17/4/15 by zmyer
 @SuppressWarnings("serial")
 public class SessionEvent extends java.util.EventObject {
 
+    // TODO: 17/4/15 by zmyer
     public SessionEvent(Session source) {
         super(source);
     }
 
+    // TODO: 17/4/15 by zmyer
     public Session getSession() {
         return (Session) super.getSource();
     }

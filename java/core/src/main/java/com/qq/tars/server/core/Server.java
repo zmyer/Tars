@@ -16,16 +16,6 @@
 
 package com.qq.tars.server.core;
 
-import java.io.IOException;
-import java.net.DatagramSocket;
-import java.net.InetSocketAddress;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.ServerSocketChannel;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-import java.util.concurrent.Executor;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.client.CommunicatorConfig;
 import com.qq.tars.client.CommunicatorFactory;
@@ -49,61 +39,97 @@ import com.qq.tars.support.log.LogConfCacheMngr;
 import com.qq.tars.support.log.LoggerFactory;
 import com.qq.tars.support.om.OmConstants;
 import com.qq.tars.support.om.OmServiceMngr;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.ServerSocketChannel;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.concurrent.Executor;
 
+// TODO: 17/4/13 by zmyer
 public class Server {
-
+    //主机地址
     private String host = null;
+    //端口号
     private int port;
+    //udp端口号
     private int udpPort;
+    //tcp端口号
     private int tcpPort;
-
+    //后台管理主机
     private String adminHost = null;
+    //后台管理端口号
     private int adminPort;
 
+    //协议工厂
     private ProtocolFactory mainProtocolFactory = null;
 
+    //主selector管理者
     private SelectorManager mainSelectorManager = null;
 
+    //udp selector管理者
     private SelectorManager udpSelectorManager = null;
 
+    //tcp selector管理者
     private SelectorManager tcpSelectorManager = null;
 
+    //事件处理对象
     private Processor processor = null;
 
+    //容器对象
     private Container container = null;
 
+    //执行线程池对象
     private Executor threadPool = null;
 
+    //是否保持存活标记
     private boolean keepAlive = true;
 
+    //会话超时时间
     private int sessionTimeOut;
 
+    //会话检查时间间隔
     private int sessionCheckInterval;
 
+    //udp协议工厂
     private ProtocolFactory udpProtocolFactory;
 
+    //tcp协议工厂
     private ProtocolFactory tcpProtocolFactory;
 
+    // TODO: 17/4/13 by zmyer
     public Server() {
         loadServerConfig();
     }
 
+    // TODO: 17/4/13 by zmyer
     public void startUp(String args[]) {
         try {
+            //初始化通信对象
             initCommunicator();
 
+            //配置日志
             configLogger();
 
+            //初始化服务器日志对象
             ServerLogger.init();
 
+            //启动监控服务
             startOmService();
 
+            //启动app容器对象
             startAppContainer();
 
+            //启动NIO服务器
             startNIOServer();
 
+            //启动会话管理器
             startSessionManager();
 
+            //注册服务器hook
             registerServerHook();
 
             System.out.println("[SERVER] server is ready...");
@@ -111,43 +137,62 @@ public class Server {
             System.out.println("[SERVER] failed to start server...");
             System.out.close();
             System.err.close();
-            System.exit(-1);
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     protected void startAppContainer() throws Exception {
+        //读取main协议工厂对象
         this.mainProtocolFactory = new TarsServantProtocolFactory(new TarsCodec(ConfigurationManager.getInstance().getserverConfig().getCharsetName()));
+        //创建事件处理器对象
         this.processor = new ServantProcessor();
+        //创建app容器对象
         this.container = new AppContainer();
+        //将该容器对象注册到管理器中
         ContainerManager.registerContainer(this.container);
-
+        //创建线程池分发对象
         this.threadPool = new ServerThreadPoolDispatcher();
-        this.mainSelectorManager = new SelectorManager(Utils.getSelectorPoolSize(), mainProtocolFactory, threadPool, processor, keepAlive, "server-tcp-reactor", false);
+        //创建main选择器管理器
+        this.mainSelectorManager = new SelectorManager(Utils.getSelectorPoolSize(), mainProtocolFactory,
+            threadPool, processor, keepAlive, "server-tcp-reactor", false);
+        //设置非延时标记
         this.mainSelectorManager.setTcpNoDelay(ConfigurationManager.getInstance().getserverConfig().isTcpNoDelay());
-
+        //启动容器
         this.container.start();
     }
 
+    // TODO: 17/4/13 by zmyer
     protected void startNIOServer() throws IOException {
+        //启动主服务器
         startMainServer(host, port);
+        //启动后台管理服务器
         startMainServer(adminHost, adminPort);
 
+        //启动udp服务器
         startUDPServer();
 
+        //启动tcp服务器
         startTCPServer();
     }
 
+    // TODO: 17/4/15 by zmyer
     private void startOmService() {
+        //启动om服务
         OmServiceMngr.getInstance().initAndStartOmService();
     }
 
+    // TODO: 17/4/15 by zmyer
     private void initCommunicator() {
-        CommunicatorConfig config = ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig();
+        //读取通信对象配置
+        CommunicatorConfig config = ConfigurationManager.getInstance().getserverConfig()
+            .getCommunicatorConfig();
+        //创建通信对象
         Communicator communicator = CommunicatorFactory.getInstance().getCommunicator(config);
-
+        //注册通信对象
         BeanAccessor.setBeanValue(CommunicatorFactory.getInstance(), "communicator", communicator);
     }
 
+    // TODO: 17/4/15 by zmyer
     private void configLogger() {
         Communicator communicator = CommunicatorFactory.getInstance().getCommunicator();
 
@@ -167,6 +212,7 @@ public class Server {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void startUDPServer() throws IOException {
         if (udpPort <= 0) {
             System.out.println("server.udpPort Not Exist or Invalid,  server Custom Protocol Service on UDP will be disabled.");
@@ -178,29 +224,40 @@ public class Server {
             return;
         }
 
+        //udp协议工厂对象
         udpProtocolFactory = ExtendedProtocolFactory.getInstance();
+        //创建selector管理器对象
         udpSelectorManager = new SelectorManager(1, udpProtocolFactory, threadPool, processor, false, "server-udp-reactor", true);
+        //启动selector管理器
         udpSelectorManager.start();
 
         String[] ips = host.split(";");
-        if (ips == null || ips.length == 0) throw new IllegalArgumentException("The host is illegal.");
+        if (ips == null || ips.length == 0)
+            throw new IllegalArgumentException("The host is illegal.");
 
-        DatagramChannel serverChannel = null;
+        DatagramChannel serverChannel;
         for (String ip : ips) {
-            if (ip == null || ip.trim().length() == 0) continue;
+            if (ip == null || ip.trim().length() == 0)
+                continue;
             ip = ip.trim();
 
+            //创建服务器通道对象
             serverChannel = DatagramChannel.open();
+            //创建数据包套接字对象
             DatagramSocket socket = serverChannel.socket();
+            //套接字绑定地址和端口
             socket.bind(new InetSocketAddress(ip, udpPort));
+            //设置非阻塞标记
             serverChannel.configureBlocking(false);
-
-            udpSelectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_READ);
+            //将对应的通道对象注册到指定的reactor对象中
+            udpSelectorManager.getReactor(0).registerChannel(serverChannel,
+                SelectionKey.OP_READ, null);
 
             System.out.println("[SERVER] server started at " + ip + " on ext UDP port " + String.valueOf(udpPort) + "...");
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void startTCPServer() throws IOException {
         if (tcpPort <= 0) {
             System.out.println("server.tcpPort Not Exist or Invalid,  server Custom Protocol Service on TCP will be disabled.");
@@ -212,61 +269,82 @@ public class Server {
             return;
         }
 
+        //创建协议工厂对象
         this.tcpProtocolFactory = ExtendedProtocolFactory.getInstance();
+        //创建selector管理器
         tcpSelectorManager = new SelectorManager(Utils.getSelectorPoolSize(), tcpProtocolFactory, threadPool, processor, keepAlive, "server-tcp-custom-reactor", false);
+        //设置非延时标记
         tcpSelectorManager.setTcpNoDelay(ConfigurationManager.getInstance().getserverConfig().isTcpNoDelay());
+        //启动selector管理器
         tcpSelectorManager.start();
 
         String[] ips = host.split(";");
-        if (ips == null || ips.length == 0) throw new IllegalArgumentException("The host is illegal.");
+        if (ips == null || ips.length == 0)
+            throw new IllegalArgumentException("The host is illegal.");
 
         ServerSocketChannel serverChannel = null;
         for (String ip : ips) {
-            if (ip == null || ip.trim().length() == 0) continue;
+            if (ip == null || ip.trim().length() == 0)
+                continue;
             ip = ip.trim();
 
+            //创建服务器通道对象
             serverChannel = ServerSocketChannel.open();
+            //给服务器通道对象绑定地址和端口号
             serverChannel.socket().bind(new InetSocketAddress(ip, tcpPort), 1024);
+            //设置非阻塞标记
             serverChannel.configureBlocking(false);
-
-            tcpSelectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_ACCEPT);
-
+            //开始将该通道注册到reactor对象中
+            tcpSelectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_ACCEPT, null);
             System.out.println("[SERVER] server started at " + ip + " on ext TCP port " + String.valueOf(tcpPort) + "...");
         }
 
     }
 
+    // TODO: 17/4/13 by zmyer
     private void startMainServer(String ip, int port) throws IOException {
         if (port <= 0) {
             System.out.println("server.port Not Exist or Invalid,  server Protocol Service on TCP will be disabled.");
             return;
         }
 
+        //启动主selector管理器
         mainSelectorManager.start();
 
+        //解析host
         String[] ips = host.split(";");
         if (ips == null || ips.length == 0) {
             throw new IllegalArgumentException("The host is illegal.");
         }
 
-        ServerSocketChannel serverChannel = null;
-        if (ip == null) return;
+        ServerSocketChannel serverChannel;
+        if (ip == null)
+            return;
         ip = ip.trim();
-        System.out.println("[SERVER] server starting at " + ip + " on TCP port " + String.valueOf(port) + "...");
-        serverChannel = ServerSocketChannel.open();
-        serverChannel.socket().bind(new InetSocketAddress(ip, port), 1024);
-        serverChannel.configureBlocking(false);
 
-        mainSelectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_ACCEPT);
+        System.out.println("[SERVER] server starting at " + ip + " on TCP port " + String.valueOf(port) + "...");
+        //创建服务器通道对象
+        serverChannel = ServerSocketChannel.open();
+        //为通道对象绑定指定的ip和端口
+        serverChannel.socket().bind(new InetSocketAddress(ip, port), 1024);
+        //设置通道对象为非阻塞模式
+        serverChannel.configureBlocking(false);
+        //将该通道对象注册到reactor对象中
+        mainSelectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_ACCEPT, null);
 
         System.out.println("[SERVER] server started at " + ip + " on TCP port " + String.valueOf(port) + "...");
     }
 
+    // TODO: 17/4/15 by zmyer
     protected void startSessionManager() throws IOException {
+        //创建会话管理器
         SessionManager sessionManager = SessionManager.getSessionManager();
+        //设置会话超时时间
         sessionManager.setTimeout(sessionTimeOut);
+        //设置会话检查时间间隔
         sessionManager.setCheckInterval(sessionCheckInterval);
 
+        //统计连接数
         int connCount = 0;
         for (Entry<String, ServantAdapterConfig> adapterConfigEntry : ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().entrySet()) {
             if (OmConstants.AdminServant.equals(adapterConfigEntry.getKey())) {
@@ -274,16 +352,20 @@ public class Server {
             }
             connCount += adapterConfigEntry.getValue().getMaxConns();
         }
-        ConnectionSessionListener sessionListener = new ConnectionSessionListener(connCount);
-        sessionManager.addSessionListener(sessionListener);
 
+        //创建连接会话监听器
+        ConnectionSessionListener sessionListener = new ConnectionSessionListener(connCount);
+        //将该会话监听器注册到会话管理器中
+        sessionManager.addSessionListener(sessionListener);
+        //启动会话管理器
         sessionManager.start();
     }
 
+    // TODO: 17/4/15 by zmyer
     protected void loadServerConfig() {
         try {
             ConfigurationManager.getInstance().init();
-
+            //读取服务器配置
             ServerConfig cfg = ConfigurationManager.getInstance().getserverConfig();
             ServerLogger.initNamiCoreLog(cfg.getLogPath(), cfg.getLogLevel());
             System.setProperty("com.qq.nami.server.udp.bufferSize", String.valueOf(cfg.getUdpBufferSize()));
@@ -316,20 +398,23 @@ public class Server {
         } catch (Throwable ex) {
             ex.printStackTrace(System.err);
             System.err.println("The exception occured at load server config");
-            System.exit(2);
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void registerServerHook() {
+        //注册关闭hook
         Runtime.getRuntime().addShutdownHook(new Thread() {
 
             @Override
             public void run() {
                 try {
                     if (mainSelectorManager != null) {
+                        //关闭main选择器
                         mainSelectorManager.stop();
                     }
                     if (udpSelectorManager != null) {
+                        //关闭udp选择器
                         udpSelectorManager.stop();
                     }
 
@@ -337,6 +422,7 @@ public class Server {
 
                     // 2. Stop Container
                     if (container != null) {
+                        //关闭容器
                         container.stop();
                     }
                 } catch (Exception ex) {

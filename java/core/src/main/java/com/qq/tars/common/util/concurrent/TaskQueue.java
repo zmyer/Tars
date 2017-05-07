@@ -23,76 +23,96 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * As task queue specifically designed to run with a thread pool executor.
- * The task queue is optimised to properly utilize threads within 
+ * The task queue is optimised to properly utilize threads within
  * a thread pool executor. If you use a normal queue, the executor will spawn threads
- * when there are idle threads and you wont be able to force items unto the queue itself 
- * @author fhanik
+ * when there are idle threads and you wont be able to force items unto the queue itself
  *
+ * @author fhanik
  */
+// TODO: 17/4/15 by zmyer
 public class TaskQueue extends LinkedBlockingQueue<Runnable> {
 
     private static final long serialVersionUID = 1L;
-
+    //任务队列关联的执行对象
     private TaskThreadPoolExecutor parent = null;
 
     // no need to be volatile, the one times when we change and read it occur in
     // a single thread (the one that did stop a context and fired listeners)
+    //保留的队列空间
     private Integer forcedRemainingCapacity = null;
 
+    // TODO: 17/4/25 by zmyer
     public TaskQueue() {
         super();
     }
 
+    // TODO: 17/4/25 by zmyer
     public TaskQueue(int capacity) {
         super(capacity);
     }
 
+    // TODO: 17/4/25 by zmyer
     public TaskQueue(Collection<? extends Runnable> c) {
         super(c);
     }
 
+    // TODO: 17/4/25 by zmyer
     public void setParent(TaskThreadPoolExecutor tp) {
         parent = tp;
     }
 
+    // TODO: 17/4/25 by zmyer
     public boolean force(Runnable o) {
-        if (parent.isShutdown()) throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
+        if (parent.isShutdown())
+            throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
         return super.offer(o); //forces the item onto the queue, to be used if the task is rejected
     }
 
+    // TODO: 17/4/25 by zmyer
     public boolean force(Runnable o, long timeout, TimeUnit unit) throws InterruptedException {
-        if (parent.isShutdown()) throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
+        if (parent.isShutdown())
+            throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
         return super.offer(o, timeout, unit); //forces the item onto the queue, to be used if the task is rejected
     }
 
+    // TODO: 17/4/25 by zmyer
     @Override
     public boolean offer(Runnable o) {
         //we can't do any checks
-        if (parent == null) return super.offer(o);
+        if (parent == null)
+            return super.offer(o);
         //we are maxed out on threads, simply queue the object
-        if (parent.getPoolSize() == parent.getMaximumPoolSize()) return super.offer(o);
+        if (parent.getPoolSize() == parent.getMaximumPoolSize())
+            return super.offer(o);
         //we have idle threads, just add it to the queue
-        if (parent.getSubmittedCount() < (parent.getPoolSize())) return super.offer(o);
+        if (parent.getSubmittedCount() < (parent.getPoolSize()))
+            return super.offer(o);
         //if we have less threads than maximum force creation of a new thread
-        if (parent.getPoolSize() < parent.getMaximumPoolSize()) return false;
+        if (parent.getPoolSize() < parent.getMaximumPoolSize())
+            return false;
         //if we reached here, we need to add it to the queue
         return super.offer(o);
     }
 
+    // TODO: 17/4/25 by zmyer
     @Override
     public Runnable poll(long timeout, TimeUnit unit) throws InterruptedException {
         Runnable runnable = super.poll(timeout, unit);
         if (runnable == null && parent != null) {
             // the poll timed out, it gives an opportunity to stop the current
             // thread if needed to avoid memory leaks.
+            //暂停当前的线程
             parent.stopCurrentThreadIfNeeded();
         }
+        //返回从任务队列中读取到的任务对象
         return runnable;
     }
 
+    // TODO: 17/4/25 by zmyer
     @Override
     public Runnable take() throws InterruptedException {
         if (parent != null && parent.currentThreadShouldBeStopped()) {
+            //直接从任务队列中拉取任务
             return poll(parent.getKeepAliveTime(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
             // yes, this may return null (in case of timeout) which normally
             // does not occur with take()
@@ -101,6 +121,7 @@ public class TaskQueue extends LinkedBlockingQueue<Runnable> {
         return super.take();
     }
 
+    // TODO: 17/4/25 by zmyer
     @Override
     public int remainingCapacity() {
         if (forcedRemainingCapacity != null) {
@@ -113,6 +134,7 @@ public class TaskQueue extends LinkedBlockingQueue<Runnable> {
         return super.remainingCapacity();
     }
 
+    // TODO: 17/4/25 by zmyer
     public void setForcedRemainingCapacity(Integer forcedRemainingCapacity) {
         this.forcedRemainingCapacity = forcedRemainingCapacity;
     }

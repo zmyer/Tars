@@ -16,16 +16,21 @@
 
 package com.qq.tars.server;
 
+// TODO: 17/4/15 by zmyer
 public final class ServerVersion {
-
+    //主版本
     public static final String major = "1";
+    //次版本
     public static final String minor = "0";
+    //版本编号
     public static final String build = "1";
 
+    // TODO: 17/4/15 by zmyer
     public static String getVersion() {
         return major + "." + minor + "." + build;
     }
 
+    // TODO: 17/4/15 by zmyer
     public String toString() {
         return getVersion();
     }

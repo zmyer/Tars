@@ -19,20 +19,26 @@ package com.qq.tars.net.core.nio;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 
+// TODO: 17/4/13 by zmyer
 public abstract class Acceptor {
-
+    //selector管理器
     protected SelectorManager selectorManager = null;
 
+    // TODO: 17/4/13 by zmyer
     public Acceptor(SelectorManager selectorManager) {
         this.selectorManager = selectorManager;
     }
 
+    // TODO: 17/4/13 by zmyer
     public abstract void handleConnectEvent(SelectionKey key) throws IOException;
 
+    // TODO: 17/4/13 by zmyer
     public abstract void handleAcceptEvent(SelectionKey key) throws IOException;
 
+    // TODO: 17/4/13 by zmyer
     public abstract void handleReadEvent(SelectionKey key) throws IOException;
 
+    // TODO: 17/4/13 by zmyer
     public abstract void handleWriteEvent(SelectionKey key) throws IOException;
 
 }

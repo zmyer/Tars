@@ -20,6 +20,7 @@ import com.qq.tars.rpc.common.InvokeContext;
 import com.qq.tars.rpc.common.Invoker;
 import com.qq.tars.rpc.common.Url;
 
+// TODO: 17/4/18 by zmyer
 public abstract class AbstractInvoker<T> implements Invoker<T> {
 
     private final Url url;

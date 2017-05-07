@@ -16,13 +16,6 @@
 
 package com.qq.tars.net.core.nio;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
-import java.nio.channels.SelectableChannel;
-
 import com.qq.tars.net.client.ticket.Ticket;
 import com.qq.tars.net.core.IoBuffer;
 import com.qq.tars.net.core.Request;
@@ -31,48 +24,64 @@ import com.qq.tars.net.core.Session;
 import com.qq.tars.net.protocol.ProtocolEncoder;
 import com.qq.tars.net.protocol.ProtocolException;
 import com.qq.tars.net.protocol.ProtocolFactory;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.nio.channels.SelectableChannel;
 
+// TODO: 17/4/18 by zmyer
 public class UDPSession extends Session {
-
+    //缓冲区大小
     private int bufferSize = 1024 * 4;
-
+    //selector管理器
     private SelectorManager selectorManager = null;
-
+    //通道对象
     private SelectableChannel channel = null;
-
+    //套接字地址
     private SocketAddress target = null;
 
+    // TODO: 17/4/18 by zmyer
     public UDPSession(SelectorManager selectorManager) {
         this.selectorManager = selectorManager;
     }
 
+    // TODO: 17/4/18 by zmyer
     public SelectableChannel getChannel() {
         return channel;
     }
 
+    // TODO: 17/4/18 by zmyer
     public void setBufferSize(int size) {
-        if (size <= 0 || size > 1024 * 64) return;
+        if (size <= 0 || size > 1024 * 64)
+            return;
         this.bufferSize = size;
     }
 
+    // TODO: 17/4/18 by zmyer
     public void setChannel(SelectableChannel channel) {
         this.channel = channel;
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     protected void accept() throws IOException {
         throw new IllegalStateException("Can't handle accept method.");
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     public void asyncClose() throws IOException {
         close();
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     public void close() throws IOException {
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     public String getRemoteIp() {
         if (this.target != null) {
@@ -82,53 +91,62 @@ public class UDPSession extends Session {
         return null;
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     public int getRemotePort() {
         if (this.channel != null) {
             return ((InetSocketAddress) target).getPort();
         }
-
         return 0;
     }
 
+    // TODO: 17/4/18 by zmyer
     public ProtocolFactory getProtocolFactory() {
         return this.selectorManager.getProtocolFactory();
     }
 
+    // TODO: 17/4/18 by zmyer
     public final void setTarget(SocketAddress address) {
-        if (address != null) this.target = address;
+        if (address != null)
+            this.target = address;
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     protected void read() throws IOException {
         ByteBuffer buffer = doRead();
         selectorManager.getThreadPool().execute(new WorkThread(this, buffer, selectorManager));
     }
 
+    // TODO: 17/4/18 by zmyer
     public void write(Request request) throws IOException {
         try {
             ProtocolFactory factory = selectorManager.getProtocolFactory();
             ProtocolEncoder encoder = factory.getEncoder();
             IoBuffer buffer = encoder.encodeRequest(request, this);
             int size = ((DatagramChannel) this.channel).send(buffer.buf(), target);
-            if (size <= 0) throw new IOException("failed to send data. {target=" + target + "}");
+            if (size <= 0)
+                throw new IOException("failed to send data. {target=" + target + "}");
 
         } catch (ProtocolException ex) {
             throw new IOException("protocol error:", ex);
         }
     }
 
+    // TODO: 17/4/18 by zmyer
     @Override
     public void write(Response response) throws IOException {
         try {
             IoBuffer buffer = selectorManager.getProtocolFactory().getEncoder().encodeResponse(response, this);
             int size = ((DatagramChannel) this.channel).send(buffer.buf(), target);
-            if (size <= 0) throw new IOException("failed to send data. {target=" + target + "}");
+            if (size <= 0)
+                throw new IOException("failed to send data. {target=" + target + "}");
         } catch (ProtocolException ex) {
             throw new IOException("protocol error:", ex);
         }
     }
 
+    // TODO: 17/4/18 by zmyer
     public ByteBuffer doRead() throws IOException {
         ByteBuffer data = ByteBuffer.allocate(bufferSize);
         SocketAddress address = ((DatagramChannel) this.channel).receive(data);
@@ -136,10 +154,12 @@ public class UDPSession extends Session {
         if (data.remaining() >= bufferSize) {
             throw new IOException("package size CAN NOT >= " + bufferSize);
         }
-        if (this.target == null) setTarget(address);
+        if (this.target == null)
+            setTarget(address);
         return data;
     }
 
+    // TODO: 17/4/18 by zmyer
     Object parseDatagramPacket(ByteBuffer data) throws IOException {
         try {
             if (this.status == SessionStatus.CLIENT_CONNECTED) {
@@ -155,19 +175,23 @@ public class UDPSession extends Session {
         return null;
     }
 
+    // TODO: 17/4/18 by zmyer
     private Response readResponse(ByteBuffer data) throws IOException, ProtocolException {
         Response response = selectorManager.getProtocolFactory().getDecoder().decodeResponse(IoBuffer.wrap(data), this);
 
         if (response != null) {
-            if (response.getTicketNumber() == Ticket.DEFAULT_TICKET_NUMBER) response.setTicketNumber(response.getSession().hashCode());
+            if (response.getTicketNumber() == Ticket.DEFAULT_TICKET_NUMBER)
+                response.setTicketNumber(response.getSession().hashCode());
         }
 
         return response;
     }
 
+    // TODO: 17/4/18 by zmyer
     private Request readRequest(ByteBuffer data) throws IOException, ProtocolException {
         Request request = selectorManager.getProtocolFactory().getDecoder().decodeRequest(IoBuffer.wrap(data), this);
-        if (request == null) throw new ProtocolException("failed to decode udp packet.");
+        if (request == null)
+            throw new ProtocolException("failed to decode udp packet.");
         request.resetBornTime();
         return request;
     }

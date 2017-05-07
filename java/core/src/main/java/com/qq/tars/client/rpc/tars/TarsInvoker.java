@@ -16,10 +16,6 @@
 
 package com.qq.tars.client.rpc.tars;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Map;
-
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.client.cluster.ServantnvokerAliveChecker;
 import com.qq.tars.client.rpc.ServantClient;
@@ -38,13 +34,19 @@ import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
 import com.qq.tars.rpc.protocol.tars.support.AnalystManager;
 import com.qq.tars.support.stat.InvokeStatHelper;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.Map;
 
+// TODO: 17/4/15 by zmyer
 public class TarsInvoker<T> extends ServantInvoker<T> {
 
+    // TODO: 17/4/15 by zmyer
     public TarsInvoker(ServantProxyConfig config, Class<T> api, Url url, ServantClient[] clients) {
         super(config, api, url, clients);
     }
 
+    // TODO: 17/4/15 by zmyer
     protected Object doInvokeServant(final ServantInvokeContext inv) throws Throwable {
         long begin = System.currentTimeMillis();
 
@@ -80,11 +82,15 @@ public class TarsInvoker<T> extends ServantInvoker<T> {
         }
     }
 
+    // TODO: 17/4/18 by zmyer
     private ServantClient getClient() {
-        return clients.length == 1 ? clients[0] : clients[(index.getAndIncrement() & Integer.MAX_VALUE) % clients.length];
+        return clients.length == 1 ? clients[0] :
+            clients[(index.getAndIncrement() & Integer.MAX_VALUE) % clients.length];
     }
 
-    private TarsServantResponse invokeWithSync(Method method, Object args[], Map<String, String> context) throws Throwable {
+    // TODO: 17/4/18 by zmyer
+    private TarsServantResponse invokeWithSync(Method method, Object args[],
+        Map<String, String> context) throws Throwable {
         ServantClient client = getClient();
         TarsServantRequest request = new TarsServantRequest(client.getIoSession());
         request.setVersion(TarsHelper.VERSION);
@@ -98,8 +104,10 @@ public class TarsInvoker<T> extends ServantInvoker<T> {
         return client.invokeWithSync(request);
     }
 
+    // TODO: 17/4/18 by zmyer
     @SuppressWarnings("unchecked")
-    private void invokeWithAsync(Method method, Object args[], Map<String, String> context) throws Throwable {
+    private void invokeWithAsync(Method method, Object args[],
+        Map<String, String> context) throws Throwable {
         ServantClient client = getClient();
         TarsServantRequest request = new TarsServantRequest(client.getIoSession());
         request.setVersion(TarsHelper.VERSION);

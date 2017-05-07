@@ -16,9 +16,6 @@
 
 package com.qq.tars.support.query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.common.support.Holder;
@@ -27,7 +24,10 @@ import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.support.query.prx.EndpointF;
 import com.qq.tars.support.query.prx.QueryFPrx;
+import java.util.ArrayList;
+import java.util.List;
 
+// TODO: 17/4/18 by zmyer
 public final class QueryHelper {
 
     private final Communicator communicator;
@@ -45,6 +45,7 @@ public final class QueryHelper {
         return prx;
     }
 
+    // TODO: 17/4/18 by zmyer
     public String getServerNodes(ServantProxyConfig config) {
         QueryFPrx queryProxy = getPrx();
         String name = config.getSimpleObjectName();

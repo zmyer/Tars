@@ -22,6 +22,7 @@ import com.qq.tars.support.notify.prx.NOTIFYLEVEL;
 import com.qq.tars.support.notify.prx.NotifyPrx;
 import com.qq.tars.support.om.OmLogger;
 
+// TODO: 17/4/15 by zmyer
 public class NotifyHelper {
 
     private static final NotifyHelper Instance = new NotifyHelper();
@@ -80,8 +81,10 @@ public class NotifyHelper {
             }
 
             NotifyPrx notifyPrx = communicator.stringToProxy(NotifyPrx.class, ConfigurationManager.getInstance().getserverConfig().getNotify());
-            if (sync) notifyPrx.reportServer(app + "." + server, Thread.currentThread().getId() + "", result);
-            else notifyPrx.async_reportServer(null, app + "." + server, Thread.currentThread().getId() + "", result);
+            if (sync)
+                notifyPrx.reportServer(app + "." + server, Thread.currentThread().getId() + "", result);
+            else
+                notifyPrx.async_reportServer(null, app + "." + server, Thread.currentThread().getId() + "", result);
         } catch (Exception e) {
             OmLogger.record("RemoteNotify|report error", e);
         }

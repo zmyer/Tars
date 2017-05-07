@@ -16,13 +16,6 @@
 
 package com.qq.tars.client.cluster;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.client.util.ClientLogger;
 import com.qq.tars.common.util.Constants;
@@ -31,7 +24,14 @@ import com.qq.tars.rpc.common.InvokeContext;
 import com.qq.tars.rpc.common.Invoker;
 import com.qq.tars.rpc.common.LoadBalance;
 import com.qq.tars.rpc.common.exc.NoInvokerException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
+// TODO: 17/4/15 by zmyer
 public class DefaultLoadBalance implements LoadBalance {
 
     private final AtomicInteger sequence = new AtomicInteger();
@@ -43,6 +43,7 @@ public class DefaultLoadBalance implements LoadBalance {
         this.config = config;
     }
 
+    // TODO: 17/4/18 by zmyer
     public <T> Invoker<T> select(Collection<Invoker<T>> invokers, InvokeContext context) throws NoInvokerException {
         if (ClientLogger.getLogger().isDebugEnabled()) {
             ClientLogger.getLogger().debug(config.getSimpleObjectName() + " try to select active invoker, size=" + (invokers == null || invokers.isEmpty() ? 0 : invokers.size()));

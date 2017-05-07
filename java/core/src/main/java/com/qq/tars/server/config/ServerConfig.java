@@ -16,15 +16,15 @@
 
 package com.qq.tars.server.config;
 
-import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.List;
-
 import com.qq.tars.client.CommunicatorConfig;
 import com.qq.tars.common.support.Endpoint;
 import com.qq.tars.common.util.Config;
 import com.qq.tars.support.om.OmConstants;
+import java.io.File;
+import java.util.LinkedHashMap;
+import java.util.List;
 
+// TODO: 17/4/15 by zmyer
 public class ServerConfig {
 
     private String application;
@@ -214,11 +214,13 @@ public class ServerConfig {
         return servantAdapterConfMap;
     }
 
-    public ServerConfig setServantAdapterConfMap(LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap) {
+    public ServerConfig setServantAdapterConfMap(
+        LinkedHashMap<String, ServantAdapterConfig> servantAdapterConfMap) {
         this.servantAdapterConfMap = servantAdapterConfMap;
         return this;
     }
 
+    // TODO: 17/4/15 by zmyer
     public CommunicatorConfig getCommunicatorConfig() {
         return communicatorConfig;
     }

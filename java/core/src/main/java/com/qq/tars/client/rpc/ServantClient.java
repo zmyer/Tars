@@ -16,6 +16,21 @@
 
 package com.qq.tars.client.rpc;
 
+import com.qq.tars.client.util.ClientLogger;
+import com.qq.tars.net.client.Callback;
+import com.qq.tars.net.client.FutureImpl;
+import com.qq.tars.net.client.ticket.Ticket;
+import com.qq.tars.net.client.ticket.TicketManager;
+import com.qq.tars.net.core.Request.InvokeStatus;
+import com.qq.tars.net.core.Session;
+import com.qq.tars.net.core.Session.SessionStatus;
+import com.qq.tars.net.core.nio.SelectorManager;
+import com.qq.tars.net.core.nio.TCPSession;
+import com.qq.tars.net.core.nio.UDPSession;
+import com.qq.tars.rpc.exc.NotConnectedException;
+import com.qq.tars.rpc.exc.TimeoutException;
+import com.qq.tars.rpc.protocol.ServantRequest;
+import com.qq.tars.rpc.protocol.ServantResponse;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -26,22 +41,7 @@ import java.nio.channels.SocketChannel;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import com.qq.tars.client.util.ClientLogger;
-import com.qq.tars.net.client.Callback;
-import com.qq.tars.net.client.FutureImpl;
-import com.qq.tars.net.client.ticket.Ticket;
-import com.qq.tars.net.client.ticket.TicketManager;
-import com.qq.tars.net.core.Session;
-import com.qq.tars.net.core.Request.InvokeStatus;
-import com.qq.tars.net.core.Session.SessionStatus;
-import com.qq.tars.net.core.nio.SelectorManager;
-import com.qq.tars.net.core.nio.TCPSession;
-import com.qq.tars.net.core.nio.UDPSession;
-import com.qq.tars.rpc.exc.NotConnectedException;
-import com.qq.tars.rpc.exc.TimeoutException;
-import com.qq.tars.rpc.protocol.ServantRequest;
-import com.qq.tars.rpc.protocol.ServantResponse;
-
+// TODO: 17/4/18 by zmyer
 public class ServantClient {
 
     private Session session = null;
@@ -119,12 +119,14 @@ public class ServantClient {
         }
     }
 
+    // TODO: 17/4/18 by zmyer
     public void ensureConnected() throws IOException {
         if (isNotConnected()) {
             reConnect();
         }
     }
 
+    // TODO: 17/4/18 by zmyer
     public <T extends ServantResponse> T invokeWithSync(ServantRequest request) throws IOException {
         Ticket<T> ticket = null;
         T response = null;
@@ -157,7 +159,9 @@ public class ServantClient {
         return response;
     }
 
-    public <T extends ServantResponse> void invokeWithAsync(ServantRequest request, Callback<T> callback) throws IOException {
+    // TODO: 17/4/18 by zmyer
+    public <T extends ServantResponse> void invokeWithAsync(ServantRequest request,
+        Callback<T> callback) throws IOException {
         Ticket<T> ticket = null;
 
         try {
@@ -175,7 +179,8 @@ public class ServantClient {
         }
     }
 
-    public <T extends ServantResponse> Future<T> invokeWithFuture(ServantRequest request) throws IOException {
+    public <T extends ServantResponse> Future<T> invokeWithFuture(
+        ServantRequest request) throws IOException {
         Ticket<T> ticket = null;
         try {
             ensureConnected();

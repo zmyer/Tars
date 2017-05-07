@@ -25,33 +25,38 @@ import com.qq.tars.net.core.SessionEvent;
 import com.qq.tars.net.core.SessionListener;
 import com.qq.tars.net.core.SessionManager;
 
+// TODO: 17/4/15 by zmyer
 public class SessionManagerImpl extends SessionManager {
-
+    //会话超时时间
     private long timeout = 1000 * 60 * 1;
-
+    //会话检查时间间隔
     private long interval = 1000 * 30;
-
+    //会话定时器列表
     private List<SessionListener> listeners = new LinkedList<SessionListener>();
-
+    //会话列表
     private CopyOnWriteArrayList<Session> sessionList = new CopyOnWriteArrayList<Session>();
-
+    //是否启动
     private volatile boolean started = false;
 
+    // TODO: 17/4/15 by zmyer
     public void registerSession(Session session) {
         sessionList.add(session);
         notifySessionCreated(session);
     }
 
+    // TODO: 17/4/15 by zmyer
     public void unregisterSession(Session session) {
         sessionList.remove(session);
         notifySessionDestory(session);
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public void addSessionListener(SessionListener listener) {
         this.listeners.add(listener);
     }
 
+    // TODO: 17/4/15 by zmyer
     private void notifySessionCreated(Session newSession) {
         for (SessionListener listener : listeners) {
             try {
@@ -62,6 +67,7 @@ public class SessionManagerImpl extends SessionManager {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void notifySessionDestory(Session oldSession) {
         for (SessionListener listener : listeners) {
             try {
@@ -72,6 +78,7 @@ public class SessionManagerImpl extends SessionManager {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     public synchronized void start() {
         if (started) return;
 
@@ -85,11 +92,14 @@ public class SessionManagerImpl extends SessionManager {
                 while (true) {
                     try {
                         for (Session session : sessionList) {
+                            //检查会话超时
                             lastUpdateOperationTime = session.getLastOperationTime();
                             if ((System.currentTimeMillis() - lastUpdateOperationTime) > timeout) {
                                 String s = "The session has timed out. [from ip: " + session.getRemoteIp() + " port: " + session.getRemotePort() + "]";
                                 System.out.println(s);
+                                //关闭会话
                                 session.asyncClose();
+                                //注销会话
                                 unregisterSession(session);
                             }
                         }
@@ -105,10 +115,12 @@ public class SessionManagerImpl extends SessionManager {
         started = true;
     }
 
+    // TODO: 17/4/15 by zmyer
     public void setCheckInterval(long interval) {
         this.interval = interval;
     }
 
+    // TODO: 17/4/15 by zmyer
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }

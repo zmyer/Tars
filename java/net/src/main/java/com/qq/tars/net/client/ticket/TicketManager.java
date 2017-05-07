@@ -16,14 +16,13 @@
 
 package com.qq.tars.net.client.ticket;
 
+import com.qq.tars.net.client.Callback;
+import com.qq.tars.net.core.Request;
+import com.qq.tars.net.core.Session;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-
-import com.qq.tars.net.client.Callback;
-import com.qq.tars.net.core.Request;
-import com.qq.tars.net.core.Session;
 
 public class TicketManager {
 
@@ -53,10 +52,12 @@ public class TicketManager {
         return (Ticket<T>) tickets.get(seq);
     }
 
+    // TODO: 17/4/18 by zmyer
     public static <T> Ticket<T> createTicket(Request req, Session session, long timeout) {
         return createTicket(req, session, timeout, null);
     }
 
+    // TODO: 17/4/18 by zmyer
     public static <T> Ticket<T> createTicket(Request req, Session session, long timeout, Callback<T> callback) {
         if (req.getTicketNumber() == Ticket.DEFAULT_TICKET_NUMBER) {
             req.setTicketNumber(session.hashCode());

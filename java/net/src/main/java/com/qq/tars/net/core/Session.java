@@ -16,13 +16,13 @@
 
 package com.qq.tars.net.core;
 
+import com.qq.tars.net.protocol.ProtocolFactory;
 import java.io.IOException;
 import java.nio.channels.SelectableChannel;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.qq.tars.net.protocol.ProtocolFactory;
-
+// TODO: 17/4/13 by zmyer
 public abstract class Session {
 
     protected SessionStatus status = SessionStatus.NOT_CONNECTED;
@@ -33,7 +33,7 @@ public abstract class Session {
 
     protected CountDownLatch connectLatch = new CountDownLatch(1);
 
-    public static enum SessionStatus {
+    public enum SessionStatus {
         NOT_CONNECTED, CLIENT_CONNECTED, SERVER_CONNECTED, CLOSED
     }
 
@@ -65,6 +65,7 @@ public abstract class Session {
         this.status = status;
     }
 
+    // TODO: 17/4/13 by zmyer
     public void finishConnect() {
         this.connectLatch.countDown();
     }

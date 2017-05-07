@@ -19,21 +19,26 @@ package com.qq.tars.server.core;
 import com.qq.tars.net.core.Request;
 import com.qq.tars.net.core.Response;
 
+// TODO: 17/4/15 by zmyer
 public final class ContextManager {
 
+    //创建线程级别的执行上下文对象
     private static ThreadLocal<Context<? extends Request, ? extends Response>> contexts = new ThreadLocal<Context<?, ?>>();
 
+    // TODO: 17/4/15 by zmyer
     public static <REQ extends Request, RESP extends Response> Context<REQ, RESP> registerContext(REQ req, RESP resp) {
         Context<REQ, RESP> context = new Context<REQ, RESP>(req, resp);
         contexts.set(context);
         return context;
     }
 
+    // TODO: 17/4/15 by zmyer
     @SuppressWarnings("unchecked")
     public static <REQ extends Request, RESP extends Response> Context<REQ, RESP> getContext() {
         return (Context<REQ, RESP>) contexts.get();
     }
 
+    // TODO: 17/4/15 by zmyer
     public static void releaseContext() {
         contexts.remove();
     }

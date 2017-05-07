@@ -16,13 +16,13 @@
 
 package com.qq.tars.net.core;
 
+import com.qq.tars.net.client.ticket.Ticket;
+import com.qq.tars.net.protocol.ProtocolException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.qq.tars.net.client.ticket.Ticket;
-import com.qq.tars.net.protocol.ProtocolException;
-
+// TODO: 17/4/15 by zmyer
 public abstract class Request {
 
     private int ticketNum = Ticket.DEFAULT_TICKET_NUMBER;
@@ -61,8 +61,10 @@ public abstract class Request {
     }
 
     public void setDistributedContext(HashMap<String, String> map) {
-        if (map != null) this.distributedContext = map;
-        else this.distributedContext.clear();
+        if (map != null)
+            this.distributedContext = map;
+        else
+            this.distributedContext.clear();
     }
 
     public Session getIoSession() {

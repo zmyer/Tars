@@ -16,8 +16,6 @@
 
 package com.qq.tars.server.core;
 
-import java.util.Random;
-
 import com.qq.tars.common.support.Endpoint;
 import com.qq.tars.common.util.Constants;
 import com.qq.tars.net.core.Processor;
@@ -36,7 +34,9 @@ import com.qq.tars.support.log.Logger;
 import com.qq.tars.support.log.Logger.LogType;
 import com.qq.tars.support.om.OmServiceMngr;
 import com.qq.tars.support.stat.InvokeStatHelper;
+import java.util.Random;
 
+// TODO: 17/4/15 by zmyer
 public class TarsServantProcessor extends Processor {
 
     private Logger flowLogger = Logger.getLogger("tarsserver.log", LogType.LOCAL);
@@ -45,26 +45,38 @@ public class TarsServantProcessor extends Processor {
 
     private static final Random rand = new Random(System.currentTimeMillis());
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public Response process(Request req, Session session) {
-        AppContainer container = null;
+        //容器对象
+        AppContainer container;
+        //请求对象
         TarsServantRequest request = null;
+        //应答对象
         TarsServantResponse response = null;
-        ServantHomeSkeleton skeleton = null;
-        Object value = null;
-        AppContextImpl appContext = null;
+        //rpc对象
+        ServantHomeSkeleton skeleton;
+        //值对象
+        Object value;
+        //app上下文对象
+        AppContextImpl appContext;
+        //类加载器对象
         ClassLoader oldClassLoader = null;
+        //等待时间
         int waitingTime = -1;
+        //开始时间
         long startTime = req.getProcessTime();
         String remark = "";
 
         try {
+            //读取类加载器
             oldClassLoader = Thread.currentThread().getContextClassLoader();
             request = (TarsServantRequest) req;
             response = createResponse(request, session);
             response.setTicketNumber(req.getTicketNumber());
 
-            if (response.getRet() != TarsHelper.SERVERSUCCESS || TarsHelper.isPing(request.getFunctionName())) {
+            if (response.getRet() != TarsHelper.SERVERSUCCESS
+                || TarsHelper.isPing(request.getFunctionName())) {
                 return response;
             }
             int maxWaitingTimeInQueue = ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().get(request.getServantName()).getQueueTimeout();
@@ -73,7 +85,9 @@ public class TarsServantProcessor extends Processor {
                 throw new TarsException("Wait too long, server busy.");
             }
 
+            //创建容器对象
             container = ContainerManager.getContainer(AppContainer.class);
+            //创建执行上下文对象
             Context<?, ?> context = ContextManager.registerContext(request, response);
             context.setAttribute(Context.INTERNAL_START_TIME, startTime);
             context.setAttribute(Context.INTERNAL_CLIENT_IP, session.getRemoteIp());
@@ -82,28 +96,41 @@ public class TarsServantProcessor extends Processor {
             context.setAttribute(Context.INTERNAL_METHOD_NAME, request.getFunctionName());
             context.setAttribute(Context.INTERNAL_SESSION_DATA, session);
 
+            //读取容器执行上下文对象
             appContext = container.getDefaultAppContext();
-            if (appContext == null) throw new RuntimeException("failed to find the application named:[ROOT]");
+            if (appContext == null)
+                throw new RuntimeException("failed to find the application named:[ROOT]");
 
+            //设置类加载器对象
             Thread.currentThread().setContextClassLoader(appContext.getAppContextClassLoader());
 
+            //从上下文中读取rpc对象
             skeleton = appContext.getCapHomeSkeleton(request.getServantName());
-            if (skeleton == null) throw new RuntimeException("failed to find the service named[" + request.getServantName() + "]");
+            if (skeleton == null)
+                throw new RuntimeException("failed to find the service named[" + request.getServantName() + "]");
 
+            //开始执行具体的请求对象
             value = skeleton.invoke(request.getMethodInfo().getMethod(), request.getMethodParameters());
+            //设置应答结果
             response.setResult(value);
         } catch (Throwable cause) {
             System.out.println("ERROR: " + cause.getMessage());
 
+            //异步模式
             if (response.isAsyncMode()) {
                 try {
+                    //读取上下文对象
                     Context<TarsServantRequest, TarsServantResponse> context = ContextManager.getContext();
+                    //读取异步上下文对象
                     AsyncContext aContext = context.getAttribute(AsyncContext.PORTAL_CAP_ASYNC_CONTEXT_ATTRIBUTE);
-                    if (aContext != null) aContext.writeException(cause);
+                    if (aContext != null)
+                        //开始写入异常对象
+                        aContext.writeException(cause);
                 } catch (Exception ex) {
                     System.out.println("ERROR: " + ex.getMessage());
                 }
             } else {
+                //直接填充应答消息
                 response.setResult(null);
                 response.setCause(cause);
                 response.setRet(TarsHelper.SERVERUNKNOWNERR);
@@ -124,6 +151,7 @@ public class TarsServantProcessor extends Processor {
         return response;
     }
 
+    // TODO: 17/4/15 by zmyer
     private void reportServerStat(TarsServantRequest request, TarsServantResponse response, long startTime) {
         if (request.getVersion() == TarsHelper.VERSION2 || request.getVersion() == TarsHelper.VERSION3) {
             reportServerStat(Constants.TARS_TUP_CLIENT, request, response, startTime);
@@ -132,8 +160,9 @@ public class TarsServantProcessor extends Processor {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void reportServerStat(String moduleName, TarsServantRequest request, TarsServantResponse response,
-                                  long startTime) {
+        long startTime) {
         ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
         ServantAdapterConfig servantAdapterConfig = serverConfig.getServantAdapterConfMap().get(request.getServantName());
         if (servantAdapterConfig == null) {
@@ -145,9 +174,11 @@ public class TarsServantProcessor extends Processor {
         InvokeStatHelper.getInstance().addProxyStat(request.getServantName()).addInvokeTime(moduleName, request.getServantName(), serverConfig.getCommunicatorConfig().getSetDivision(), request.getFunctionName(), (masterIp == null ? "0.0.0.0" : masterIp), serverEndpoint.host(), serverEndpoint.port(), result, (System.currentTimeMillis() - startTime));
     }
 
+    // TODO: 17/4/15 by zmyer
     public static void printServiceFlowLog(Logger logger, TarsServantRequest request, int status, long cost,
-                                           String remark) {
-        if (status == TarsHelper.SERVERSUCCESS && !isFlowLogEnable()) return;
+        String remark) {
+        if (status == TarsHelper.SERVERSUCCESS && !isFlowLogEnable())
+            return;
 
         StringBuilder sb = new StringBuilder();
         Object args[] = request.getMethodParameters();
@@ -159,13 +190,13 @@ public class TarsServantProcessor extends Processor {
 
         if (null != args) {
             StringBuilder sbArgs = new StringBuilder();
-            for (int i = 0; i < args.length; i++) {
-                if (args[i] == null) {
+            for (Object arg : args) {
+                if (arg == null) {
                     sbArgs.append("NULL").append(",");
-                } else if (args[i] instanceof Number || args[i] instanceof Boolean) {
-                    sbArgs.append(args[i]).append(",");
+                } else if (arg instanceof Number || arg instanceof Boolean) {
+                    sbArgs.append(arg).append(",");
                 } else {
-                    sbArgs.append(encodeStringParam(args[i].toString(), len)).append(",");
+                    sbArgs.append(encodeStringParam(arg.toString(), len)).append(",");
                 }
             }
             sbArgs = sbArgs.length() >= 1 ? sbArgs.deleteCharAt(sbArgs.length() - 1) : sbArgs;
@@ -179,12 +210,15 @@ public class TarsServantProcessor extends Processor {
         logger.info(sb.toString());
     }
 
+    // TODO: 17/4/15 by zmyer
     private static boolean isFlowLogEnable() {
         return ConfigurationManager.getInstance().getserverConfig().getLogRate() - rand.nextInt(100) > 0;
     }
 
+    // TODO: 17/4/15 by zmyer
     private static String encodeStringParam(String longParam, int len) {
-        if (longParam == null || longParam.length() == 0) return "";
+        if (longParam == null || longParam.length() == 0)
+            return "";
         String shortParam = longParam;
 
         if (len > 0) {
@@ -194,6 +228,7 @@ public class TarsServantProcessor extends Processor {
         return shortParam.replaceAll(" ", "_").replaceAll(" ", "_").replaceAll("\n", "+").replace(',', '，').replace('(', '（').replace(')', '）');
     }
 
+    // TODO: 17/4/15 by zmyer
     private TarsServantResponse createResponse(TarsServantRequest request, Session session) {
         TarsServantResponse response = new TarsServantResponse(session);
         response.setRet(request.getRet());

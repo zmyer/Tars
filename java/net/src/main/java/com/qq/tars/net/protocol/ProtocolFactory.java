@@ -16,9 +16,10 @@
 
 package com.qq.tars.net.protocol;
 
+// TODO: 17/4/15 by zmyer
 public interface ProtocolFactory {
 
-    public ProtocolEncoder getEncoder();
+    ProtocolEncoder getEncoder();
 
-    public ProtocolDecoder getDecoder();
+    ProtocolDecoder getDecoder();
 }

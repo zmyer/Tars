@@ -16,15 +16,15 @@
 
 package com.qq.tars.rpc.protocol.tars.support;
 
+import com.qq.tars.protocol.tars.support.TarsMethodInfo;
+import com.qq.tars.protocol.util.TarsHelper;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.qq.tars.protocol.tars.support.TarsMethodInfo;
-import com.qq.tars.protocol.util.TarsHelper;
-
+// TODO: 17/4/15 by zmyer
 public final class AnalystManager {
 
     private final static AnalystManager instance = new AnalystManager();
@@ -47,6 +47,7 @@ public final class AnalystManager {
         return context_cache.get(objName);
     }
 
+    // TODO: 17/4/15 by zmyer
     public void registry(String contextName, Class<?> api, String objName) {
         Map<Method, TarsMethodInfo> methodsMap = TarsHelper.getMethodInfo(api, objName);
         if (methodsMap != null && !methodsMap.isEmpty()) {

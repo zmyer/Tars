@@ -21,9 +21,12 @@ import com.qq.tars.net.core.Request;
 import com.qq.tars.net.core.Response;
 import com.qq.tars.net.core.Session;
 
+// TODO: 17/4/15 by zmyer
 public interface ProtocolDecoder {
 
-    public Request decodeRequest(IoBuffer buff, Session session) throws ProtocolException;
+    // TODO: 17/4/15 by zmyer
+    Request decodeRequest(IoBuffer buff, Session session) throws ProtocolException;
 
-    public Response decodeResponse(IoBuffer buff, Session session) throws ProtocolException;
+    // TODO: 17/4/15 by zmyer
+    Response decodeResponse(IoBuffer buff, Session session) throws ProtocolException;
 }

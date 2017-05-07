@@ -16,14 +16,13 @@
 
 package com.qq.tars.server.core;
 
-import java.io.IOException;
-
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
 import com.qq.tars.server.apps.AppContextImpl;
 import com.qq.tars.support.log.Logger;
 import com.qq.tars.support.log.Logger.LogType;
+import java.io.IOException;
 
 public final class AsyncContext {
 

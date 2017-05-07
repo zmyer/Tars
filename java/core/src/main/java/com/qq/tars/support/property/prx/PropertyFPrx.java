@@ -20,39 +20,49 @@
 
 package com.qq.tars.support.property.prx;
 
-import com.qq.tars.protocol.annotation.*;
-import com.qq.tars.protocol.tars.annotation.*;
-import com.qq.tars.common.support.Holder;
+import com.qq.tars.protocol.annotation.Servant;
+import com.qq.tars.protocol.tars.annotation.TarsCallback;
+import com.qq.tars.protocol.tars.annotation.TarsContext;
 
 /**
- *
  * 上报服务的接口
- *
  **/
+// TODO: 17/4/18 by zmyer
 @Servant
 public interface PropertyFPrx {
-	/**
-	 * 上报属性统计信息   Prop = property
-	 * @param statmsg,             上报信息
-	 * @return int,                返回0表示成功
-	 */
-	public int reportPropMsg(java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg);
-	/**
-	 * 上报属性统计信息   Prop = property
-	 * @param statmsg,             上报信息
-	 * @return int,                返回0表示成功
-	 */
-	public int reportPropMsg(java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg, @TarsContext java.util.Map<String, String> ctx);
-	/**
-	 * 上报属性统计信息   Prop = property
-	 * @param statmsg,             上报信息
-	 * @return int,                返回0表示成功
-	 */
-	public void async_reportPropMsg(@TarsCallback PropertyFPrxCallback callback, java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg);
-	/**
-	 * 上报属性统计信息   Prop = property
-	 * @param statmsg,             上报信息
-	 * @return int,                返回0表示成功
-	 */
-	public void async_reportPropMsg(@TarsCallback PropertyFPrxCallback callback, java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg, @TarsContext java.util.Map<String, String> ctx);
+    /**
+     * 上报属性统计信息   Prop = property
+     *
+     * @param statmsg, 上报信息
+     * @return int,                返回0表示成功
+     */
+    int reportPropMsg(java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg);
+
+    /**
+     * 上报属性统计信息   Prop = property
+     *
+     * @param statmsg, 上报信息
+     * @return int,                返回0表示成功
+     */
+    int reportPropMsg(java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg,
+        @TarsContext java.util.Map<String, String> ctx);
+
+    /**
+     * 上报属性统计信息   Prop = property
+     *
+     * @param statmsg, 上报信息
+     * @return int,                返回0表示成功
+     */
+    void async_reportPropMsg(@TarsCallback PropertyFPrxCallback callback,
+        java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg);
+
+    /**
+     * 上报属性统计信息   Prop = property
+     *
+     * @param statmsg, 上报信息
+     * @return int,                返回0表示成功
+     */
+    void async_reportPropMsg(@TarsCallback PropertyFPrxCallback callback,
+        java.util.Map<StatPropMsgHead, StatPropMsgBody> statmsg,
+        @TarsContext java.util.Map<String, String> ctx);
 }

@@ -19,6 +19,7 @@ package com.qq.tars.server.config;
 import com.qq.tars.common.support.Endpoint;
 import com.qq.tars.common.util.Config;
 
+// TODO: 17/4/15 by zmyer
 public class ServantAdapterConfig {
 
     private Endpoint endpoint = null;

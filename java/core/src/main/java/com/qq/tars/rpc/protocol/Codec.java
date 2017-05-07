@@ -20,21 +20,27 @@ import com.qq.tars.common.util.Constants;
 import com.qq.tars.net.protocol.ProtocolDecoder;
 import com.qq.tars.net.protocol.ProtocolEncoder;
 
+// TODO: 17/4/15 by zmyer
 public abstract class Codec implements ProtocolEncoder, ProtocolDecoder {
 
+    // 编码名称
     protected String charsetName = Constants.default_charset_name;
 
+    // TODO: 17/4/15 by zmyer
     public Codec(String charsetName) {
         this.setCharsetName(charsetName);
     }
 
+    // TODO: 17/4/15 by zmyer
     public String getCharsetName() {
         return charsetName;
     }
 
+    // TODO: 17/4/15 by zmyer
     public void setCharsetName(String charsetName) {
         this.charsetName = charsetName;
     }
 
+    // TODO: 17/4/15 by zmyer
     public abstract String getProtocol();
 }

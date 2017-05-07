@@ -16,10 +16,11 @@
 
 package com.qq.tars.server.core;
 
+// TODO: 17/4/15 by zmyer
 public interface AppContextListener {
 
-    public void appContextStarted(AppContextEvent event);
+    void appContextStarted(AppContextEvent event);
 
-    public void appServantStarted(AppServantEvent event);
+    void appServantStarted(AppServantEvent event);
 
 }

@@ -110,7 +110,7 @@ public abstract class Server {
         server.configureBlocking(false);
 
         //3. Choose one reactor to handle NIO event
-        selectorManager.getReactor(0).registerChannel(server, interestKey);
+        selectorManager.getReactor(0).registerChannel(server, interestKey, null);
         System.out.println("INFO: NAMI Server started on port " + String.valueOf(port) + "...");
 
     }

@@ -16,11 +16,11 @@
 
 package com.qq.tars.server.config;
 
-import java.io.IOException;
-
 import com.qq.tars.common.util.Config;
 import com.qq.tars.common.util.StringUtils;
+import java.io.IOException;
 
+// TODO: 17/4/15 by zmyer
 public class ConfigurationManager {
 
     private static final ConfigurationManager instance = new ConfigurationManager();
@@ -35,10 +35,12 @@ public class ConfigurationManager {
         return serverConfig;
     }
 
+    // TODO: 17/4/15 by zmyer
     public void init() throws ConfigurationException {
         loadServerConfig();
     }
 
+    // TODO: 17/4/15 by zmyer
     private void loadServerConfig() throws ConfigurationException {
         String key = null, value = null;
         try {

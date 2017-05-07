@@ -16,10 +16,6 @@
 
 package com.qq.tars.support.config;
 
-import java.io.File;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.common.support.Holder;
 import com.qq.tars.common.util.FileUtil;
@@ -28,7 +24,11 @@ import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.support.config.prx.ConfigInfo;
 import com.qq.tars.support.config.prx.ConfigPrx;
 import com.qq.tars.support.om.OmLogger;
+import java.io.File;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: 17/4/15 by zmyer
 public class ConfigHelper {
 
     private static final ConfigHelper Instance = new ConfigHelper();

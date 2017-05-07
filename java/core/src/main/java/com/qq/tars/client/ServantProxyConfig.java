@@ -20,6 +20,7 @@ import com.qq.tars.client.util.ParseTools;
 import com.qq.tars.common.util.Constants;
 import com.qq.tars.common.util.StringUtils;
 
+// TODO: 17/4/15 by zmyer
 public final class ServantProxyConfig {
 
     private String communicatorId;
@@ -280,16 +281,23 @@ public final class ServantProxyConfig {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
         ServantProxyConfig other = (ServantProxyConfig) obj;
         if (communicatorId == null) {
-            if (other.communicatorId != null) return false;
-        } else if (!communicatorId.equals(other.communicatorId)) return false;
+            if (other.communicatorId != null)
+                return false;
+        } else if (!communicatorId.equals(other.communicatorId))
+            return false;
         if (simpleObjectName == null) {
-            if (other.simpleObjectName != null) return false;
-        } else if (!simpleObjectName.equals(other.simpleObjectName)) return false;
+            if (other.simpleObjectName != null)
+                return false;
+        } else if (!simpleObjectName.equals(other.simpleObjectName))
+            return false;
         return true;
     }
 

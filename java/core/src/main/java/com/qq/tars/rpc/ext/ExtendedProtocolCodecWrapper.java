@@ -25,29 +25,35 @@ import com.qq.tars.net.protocol.ProtocolEncoder;
 import com.qq.tars.net.protocol.ProtocolException;
 import com.qq.tars.rpc.protocol.Codec;
 
+// TODO: 17/4/15 by zmyer
 public class ExtendedProtocolCodecWrapper implements ProtocolEncoder, ProtocolDecoder {
-
+    //编码器
     protected Codec codec = null;
 
+    // TODO: 17/4/15 by zmyer
     public ExtendedProtocolCodecWrapper(Codec codec) {
         this.codec = codec;
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public IoBuffer encodeResponse(Response response, Session session) throws ProtocolException {
         return codec.encodeResponse(response, session);
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public Request decodeRequest(IoBuffer buffer, Session session) throws ProtocolException {
         return codec.decodeRequest(buffer, session);
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public Response decodeResponse(IoBuffer buff, Session session) throws ProtocolException {
         return codec.decodeResponse(buff, session);
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public IoBuffer encodeRequest(Request request, Session session) throws ProtocolException {
         return codec.encodeRequest(request, session);

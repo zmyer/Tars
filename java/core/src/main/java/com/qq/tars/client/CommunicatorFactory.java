@@ -16,35 +16,41 @@
 
 package com.qq.tars.client;
 
+import com.qq.tars.client.util.ParseTools;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.qq.tars.client.util.ParseTools;
-
+// TODO: 17/4/15 by zmyer
 public final class CommunicatorFactory {
-
+    //通信对象工厂
     private final static CommunicatorFactory instance = new CommunicatorFactory();
-
+    //通信对象映射表
     private volatile ConcurrentHashMap<Object, Communicator> CommunicatorMap = new ConcurrentHashMap<Object, Communicator>();
-
+    //通信对象
     private volatile Communicator communicator = null;
 
+    // TODO: 17/4/15 by zmyer
     public static CommunicatorFactory getInstance() {
         return instance;
     }
 
+    // TODO: 17/4/15 by zmyer
     public Communicator getCommunicator() {
         return communicator;
     }
 
+    // TODO: 17/4/15 by zmyer
     void setCommunicator(Communicator communicator) {
         if (communicator != null) {
             this.communicator = communicator;
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     public Communicator getCommunicator(String locator) {
+        //读取通信对象
         Communicator communicator = CommunicatorMap.get(locator);
         if (communicator != null) {
+            //返回通信对象
             return communicator;
         }
         CommunicatorConfig config = null;
@@ -56,6 +62,7 @@ public final class CommunicatorFactory {
         return CommunicatorMap.get(locator);
     }
 
+    // TODO: 17/4/15 by zmyer
     public Communicator getCommunicator(CommunicatorConfig config) {
         Communicator communicator = CommunicatorMap.get(config);
         if (communicator != null) {

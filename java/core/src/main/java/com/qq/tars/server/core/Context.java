@@ -16,11 +16,10 @@
 
 package com.qq.tars.server.core;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.qq.tars.net.core.Request;
 import com.qq.tars.net.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class Context<REQ extends Request, RESP extends Response> {
 
@@ -64,7 +63,8 @@ public final class Context<REQ extends Request, RESP extends Response> {
     public <T> T getAttribute(String name, T defaultValue) {
         Object value = null;
         value = attributes.get(name);
-        if (value == null) return defaultValue;
+        if (value == null)
+            return defaultValue;
         return (T) value;
     }
 

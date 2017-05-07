@@ -16,13 +16,6 @@
 
 package com.qq.tars.support.property;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.rpc.exc.TarsException;
 import com.qq.tars.server.config.ConfigurationManager;
@@ -31,19 +24,28 @@ import com.qq.tars.support.property.prx.PropertyFPrx;
 import com.qq.tars.support.property.prx.StatPropInfo;
 import com.qq.tars.support.property.prx.StatPropMsgBody;
 import com.qq.tars.support.property.prx.StatPropMsgHead;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: 17/4/15 by zmyer
 public class PropertyReportHelper {
 
-    public static interface Policy {
+    // TODO: 17/4/15 by zmyer
+    public interface Policy {
 
-        public String desc();
+        String desc();
 
-        public String get();
+        String get();
 
-        public void set(int value);
+        void set(int value);
 
     }
 
+    // TODO: 17/4/18 by zmyer
     private static class ReportData {
 
         public StatPropMsgHead head;
@@ -58,6 +60,7 @@ public class PropertyReportHelper {
 
     }
 
+    // TODO: 17/4/18 by zmyer
     public static class PropertyReporter {
 
         private static final int PROPERTY_PROTOCOL_LEN = 50;
@@ -65,6 +68,7 @@ public class PropertyReportHelper {
         private String propRptName;
         private String moduleName;
 
+        // TODO: 17/4/18 by zmyer
         public PropertyReporter(String moduleName, String propRptName, Policy[] policies) {
             this.moduleName = moduleName;
             this.propRptName = propRptName;
@@ -74,11 +78,13 @@ public class PropertyReportHelper {
             this.policies = map.values();
         }
 
+        // TODO: 17/4/18 by zmyer
         public void report(int value) {
             for (Policy policy : policies)
                 policy.set(value);
         }
 
+        // TODO: 17/4/18 by zmyer
         public ReportData getReportData() {
             int len = 0;
             StatPropMsgHead head = new StatPropMsgHead(moduleName, "", propRptName, null, null, null, null, 1);
@@ -99,6 +105,7 @@ public class PropertyReportHelper {
 
     }
 
+    //单例对象
     private static final PropertyReportHelper Instance = new PropertyReportHelper();
     private static final int MAX_REPORT_SIZE = 1400;
     private Map<String, PropertyReporter> reporters;
@@ -145,13 +152,15 @@ public class PropertyReportHelper {
         reporter.report(value);
     }
 
+    // TODO: 17/4/18 by zmyer
     public void report() {
         try {
             if (!configed) {
                 return;
             }
 
-            PropertyFPrx propertyFPrx = communicator.stringToProxy(PropertyFPrx.class, ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getProperty());
+            PropertyFPrx propertyFPrx = communicator.stringToProxy(PropertyFPrx.class,
+                ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getProperty());
 
             Map<StatPropMsgHead, StatPropMsgBody> sendData = new HashMap<StatPropMsgHead, StatPropMsgBody>();
             int sendLen = 0;

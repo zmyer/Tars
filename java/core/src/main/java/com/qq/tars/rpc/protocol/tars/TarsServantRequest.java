@@ -16,21 +16,21 @@
 
 package com.qq.tars.rpc.protocol.tars;
 
-import java.util.Map;
-
 import com.qq.tars.net.core.Session;
 import com.qq.tars.protocol.tars.TarsInputStream;
 import com.qq.tars.protocol.tars.support.TarsMethodInfo;
 import com.qq.tars.protocol.util.TarsHelper;
 import com.qq.tars.rpc.protocol.ServantRequest;
+import java.util.Map;
 
+// TODO: 17/4/15 by zmyer
 public class TarsServantRequest extends ServantRequest implements java.io.Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private short version; 
-    private byte packetType; 
-    private int messageType; 
+    private short version;
+    private byte packetType;
+    private int messageType;
     private String servantName;
     private String functionName;
     private int timeout; // iTimeout

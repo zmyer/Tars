@@ -16,11 +16,12 @@
 
 package com.qq.tars.rpc.common;
 
+import com.qq.tars.rpc.common.exc.NoInvokerException;
 import java.util.Collection;
 
-import com.qq.tars.rpc.common.exc.NoInvokerException;
-
+// TODO: 17/4/18 by zmyer
 public interface LoadBalance {
 
-    <T> Invoker<T> select(Collection<Invoker<T>> invokers, InvokeContext context) throws NoInvokerException;
+    <T> Invoker<T> select(Collection<Invoker<T>> invokers,
+        InvokeContext context) throws NoInvokerException;
 }

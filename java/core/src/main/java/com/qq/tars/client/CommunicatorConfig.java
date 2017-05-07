@@ -16,12 +16,12 @@
 
 package com.qq.tars.client;
 
+import com.qq.tars.common.util.Config;
+import com.qq.tars.common.util.Constants;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.qq.tars.common.util.Config;
-import com.qq.tars.common.util.Constants;
-
+// TODO: 17/4/15 by zmyer
 public class CommunicatorConfig {
 
     private String locator = null;
@@ -347,16 +347,23 @@ public class CommunicatorConfig {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
         CommunicatorConfig other = (CommunicatorConfig) obj;
         if (locator == null) {
-            if (other.locator != null) return false;
-        } else if (!locator.equals(other.locator)) return false;
+            if (other.locator != null)
+                return false;
+        } else if (!locator.equals(other.locator))
+            return false;
         if (moduleName == null) {
-            if (other.moduleName != null) return false;
-        } else if (!moduleName.equals(other.moduleName)) return false;
+            if (other.moduleName != null)
+                return false;
+        } else if (!moduleName.equals(other.moduleName))
+            return false;
         return true;
     }
 

@@ -21,9 +21,10 @@ import com.qq.tars.net.core.Request;
 import com.qq.tars.net.core.Response;
 import com.qq.tars.net.core.Session;
 
+// TODO: 17/4/15 by zmyer
 public interface ProtocolEncoder {
 
-    public IoBuffer encodeResponse(Response response, Session session) throws ProtocolException;
+    IoBuffer encodeResponse(Response response, Session session) throws ProtocolException;
 
-    public IoBuffer encodeRequest(Request request, Session session) throws ProtocolException;
+    IoBuffer encodeRequest(Request request, Session session) throws ProtocolException;
 }

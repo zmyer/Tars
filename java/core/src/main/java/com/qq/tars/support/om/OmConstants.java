@@ -16,6 +16,7 @@
 
 package com.qq.tars.support.om;
 
+// TODO: 17/4/18 by zmyer
 public interface OmConstants {
 
     String PropWaitTime = "req.queue.waitingtime";

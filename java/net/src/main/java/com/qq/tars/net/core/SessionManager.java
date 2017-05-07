@@ -18,22 +18,31 @@ package com.qq.tars.net.core;
 
 import com.qq.tars.net.core.nio.SessionManagerImpl;
 
+// TODO: 17/4/15 by zmyer
 public abstract class SessionManager {
 
+    // TODO: 17/4/15 by zmyer
     private static SessionManager manager = new SessionManagerImpl();
 
+    // TODO: 17/4/15 by zmyer
     public abstract void registerSession(Session session);
 
+    // TODO: 17/4/15 by zmyer
     public abstract void unregisterSession(Session session);
 
+    // TODO: 17/4/15 by zmyer
     public abstract void addSessionListener(SessionListener listener);
 
+    // TODO: 17/4/15 by zmyer
     public abstract void setTimeout(long timeout);
 
+    // TODO: 17/4/15 by zmyer
     public abstract void setCheckInterval(long interval);
 
+    // TODO: 17/4/15 by zmyer
     public abstract void start();
 
+    // TODO: 17/4/15 by zmyer
     public static SessionManager getSessionManager() {
         return manager;
     }

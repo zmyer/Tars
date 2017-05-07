@@ -21,18 +21,22 @@ import com.qq.tars.net.protocol.ProtocolEncoder;
 import com.qq.tars.net.protocol.ProtocolFactory;
 import com.qq.tars.rpc.protocol.Codec;
 
+// TODO: 17/4/15 by zmyer
 public class ExtendedProtocolFactory implements ProtocolFactory {
-
+    //编码封装队形
     private ExtendedProtocolCodecWrapper codecWrapper = null;
-
+    //单例对象
     private static ExtendedProtocolFactory instance = null;
 
+    // TODO: 17/4/15 by zmyer
     public static final ExtendedProtocolFactory getInstance() {
         return instance;
     }
 
+    // TODO: 17/4/15 by zmyer
     public static final void registerExtendedCodecImpl(Codec codec, String contextName) {
         if (instance == null) {
+            //创建单例对象
             instance = buildExtendedProtocolFactory(codec);
         } else {
             if (instance.codecWrapper.codec.getClass() != codec.getClass()) {
@@ -41,18 +45,23 @@ public class ExtendedProtocolFactory implements ProtocolFactory {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     public static final ExtendedProtocolFactory buildExtendedProtocolFactory(Codec codec) {
+        //创建协议工厂对象
         return new ExtendedProtocolFactory(codec);
     }
 
+    // TODO: 17/4/15 by zmyer
     private ExtendedProtocolFactory(Codec codec) {
         this.codecWrapper = new ExtendedProtocolCodecWrapper(codec);
     }
 
+    // TODO: 17/4/15 by zmyer
     public ProtocolDecoder getDecoder() {
         return this.codecWrapper;
     }
 
+    // TODO: 17/4/15 by zmyer
     public ProtocolEncoder getEncoder() {
         return this.codecWrapper;
     }

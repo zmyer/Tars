@@ -18,8 +18,10 @@ package com.qq.tars.server.startup;
 
 import com.qq.tars.server.core.Server;
 
+// TODO: 17/4/18 by zmyer
 public class Main {
 
+    // TODO: 17/4/18 by zmyer
     public static void main(String[] args) {
         new Server().startUp(args);
     }

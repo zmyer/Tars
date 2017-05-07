@@ -18,6 +18,7 @@ package com.qq.tars.net.core;
 
 import java.nio.ByteBuffer;
 
+// TODO: 17/4/15 by zmyer
 public final class IoBuffer {
 
     private ByteBuffer buf = null;
@@ -65,7 +66,7 @@ public final class IoBuffer {
     }
 
     public IoBuffer put(byte value) {
-        return put(new byte[] { value });
+        return put(new byte[] {value});
     }
 
     public IoBuffer put(byte[] src) {
@@ -104,7 +105,8 @@ public final class IoBuffer {
 
     public final IoBuffer unflip() {
         buf.position(buf.limit());
-        if (buf.limit() != buf.capacity()) buf.limit(buf.capacity());
+        if (buf.limit() != buf.capacity())
+            buf.limit(buf.capacity());
         return this;
     }
 
@@ -154,7 +156,8 @@ public final class IoBuffer {
         int newSize = this.buf.position() + length;
         ByteBuffer newBuffer = null;
 
-        if (size < length) throw new IndexOutOfBoundsException();
+        if (size < length)
+            throw new IndexOutOfBoundsException();
 
         while (newSize > newCapacity) {
             newCapacity = newCapacity * 2;

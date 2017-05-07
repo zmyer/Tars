@@ -16,13 +16,6 @@
 
 package com.qq.tars.client.rpc;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
-
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.client.support.ClientPoolManager;
 import com.qq.tars.client.util.ClientLogger;
@@ -35,7 +28,14 @@ import com.qq.tars.rpc.common.ProtocolInvoker;
 import com.qq.tars.rpc.common.Url;
 import com.qq.tars.rpc.common.util.concurrent.ConcurrentHashSet;
 import com.qq.tars.rpc.exc.ClientException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
+// TODO: 17/4/18 by zmyer
 public abstract class ServantProtocolInvoker<T> implements ProtocolInvoker<T> {
 
     protected final Class<T> api;
@@ -45,8 +45,9 @@ public abstract class ServantProtocolInvoker<T> implements ProtocolInvoker<T> {
     protected volatile SelectorManager selectorManager = null;
     protected final ConcurrentHashSet<Invoker<T>> allInvoker = new ConcurrentHashSet<Invoker<T>>();
 
-    public ServantProtocolInvoker(Class<T> api, ServantProxyConfig config, ProtocolFactory protocolFactory,
-                                  ThreadPoolExecutor threadPoolExecutor) {
+    public ServantProtocolInvoker(Class<T> api, ServantProxyConfig config,
+        ProtocolFactory protocolFactory,
+        ThreadPoolExecutor threadPoolExecutor) {
         this.api = api;
         this.servantProxyConfig = config;
         this.threadPoolExecutor = threadPoolExecutor;
@@ -84,7 +85,7 @@ public abstract class ServantProtocolInvoker<T> implements ProtocolInvoker<T> {
     }
 
     protected ServantClient initClient(Url url) {
-        ServantClient client = null;
+        ServantClient client;
         try {
             boolean tcpNoDelay = url.getParameter(Constants.TARS_CLIENT_TCPNODELAY, false);
             long connectTimeout = url.getParameter(Constants.TARS_CLIENT_CONNECTTIMEOUT, Constants.default_connect_timeout);

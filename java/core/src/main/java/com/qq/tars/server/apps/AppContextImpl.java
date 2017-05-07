@@ -16,19 +16,6 @@
 
 package com.qq.tars.server.apps;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.lang.reflect.Constructor;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.qq.tars.common.util.StringUtils;
 import com.qq.tars.protocol.annotation.Servant;
 import com.qq.tars.protocol.annotation.ServantCodec;
@@ -47,23 +34,37 @@ import com.qq.tars.server.core.ServantHomeSkeleton;
 import com.qq.tars.support.admin.AdminFServant;
 import com.qq.tars.support.admin.impl.AdminFServantImpl;
 import com.qq.tars.support.om.OmConstants;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: 17/4/15 by zmyer
 public class AppContextImpl implements AppContext {
-
+    //app名称
     private String name = null;
-
+    //路径
     private File path = null;
-
+    //app类加载器
     private AppClassLoader classLoader = null;
-
+    //是否准备完毕
     private boolean ready = true;
-
+    //
     private ConcurrentHashMap<String, ServantHomeSkeleton> skeletonMap = new ConcurrentHashMap<String, ServantHomeSkeleton>();
-
+    //上下文参数映射表
     private HashMap<String, String> contextParams = new HashMap<String, String>();
-
+    //app监听器列表
     private Set<AppContextListener> listeners = new HashSet<AppContextListener>(4);
 
+    // TODO: 17/4/15 by zmyer
     public AppContextImpl(String name, File path) {
         ClassLoader oldClassLoader = null;
 
@@ -82,10 +83,12 @@ public class AppContextImpl implements AppContext {
             ready = false;
             System.out.println("[SERVER] failed to start the applicaton. {appname=" + this.name + "}");
         } finally {
-            if (oldClassLoader != null) Thread.currentThread().setContextClassLoader(oldClassLoader);
+            if (oldClassLoader != null)
+                Thread.currentThread().setContextClassLoader(oldClassLoader);
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void injectOmServants() {
         try {
             String skeletonName = OmConstants.AdminServant;
@@ -97,6 +100,7 @@ public class AppContextImpl implements AppContext {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     public ServantHomeSkeleton getCapHomeSkeleton(String homeName) {
         if (!ready) {
             throw new RuntimeException("The application isn't started.");
@@ -104,14 +108,17 @@ public class AppContextImpl implements AppContext {
         return skeletonMap.get(homeName);
     }
 
+    // TODO: 17/4/15 by zmyer
     public Set<String> getAllServiceName() {
         return this.skeletonMap.keySet();
     }
 
+    // TODO: 17/4/15 by zmyer
     public ClassLoader getAppContextClassLoader() {
         return this.classLoader;
     }
 
+    // TODO: 17/4/15 by zmyer
     protected void initFromConfigFile() throws Exception {
         URL url = this.classLoader.getResource("WEB-INF/servants.xml");
         if (url == null) {
@@ -132,16 +139,21 @@ public class AppContextImpl implements AppContext {
 
     }
 
+    // TODO: 17/4/15 by zmyer
     private void loadInitParams(ArrayList<XMLConfigElement> list) {
-        if (list == null || list.isEmpty()) return;
+        if (list == null || list.isEmpty())
+            return;
         for (XMLConfigElement e : list) {
             String name = getChildNodeValue(e, "param-name");
             String value = getChildNodeValue(e, "param-value");
-            if (!StringUtils.isEmpty(name)) contextParams.put(name, value);
+            if (!StringUtils.isEmpty(name))
+                contextParams.put(name, value);
         }
     }
 
-    private void loadAppServants(ArrayList<XMLConfigElement> elements) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    // TODO: 17/4/15 by zmyer
+    private void loadAppServants(
+        ArrayList<XMLConfigElement> elements) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         for (XMLConfigElement element : elements) {
             if ("servant".equals(element.getName())) {
                 try {
@@ -155,19 +167,24 @@ public class AppContextImpl implements AppContext {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void appServantstarted(ServantHomeSkeleton skeleton) {
         for (AppContextListener listener : listeners) {
             listener.appServantStarted(new DefaultAppServantEvent(skeleton));
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     private void appContextStarted() {
         for (AppContextListener listener : listeners) {
             listener.appContextStarted(new DefaultAppContextEvent(this));
         }
     }
 
-    private ServantHomeSkeleton loadServant(XMLConfigElement element) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    // TODO: 17/4/15 by zmyer
+    private ServantHomeSkeleton loadServant(
+        XMLConfigElement element) throws ClassNotFoundException, InstantiationException,
+        IllegalAccessException {
         String homeName = null, homeApi = null, homeClass = null;
         Class<?> homeApiClazz = null;
         Object homeClassImpl = null;
@@ -213,6 +230,7 @@ public class AppContextImpl implements AppContext {
         return skeleton;
     }
 
+    // TODO: 17/4/15 by zmyer
     private Codec createCodec(Class<?> api, ServerConfig serverCfg) throws InstantiationException {
         Codec codec = null;
         ServantCodec servantCodec = api.getAnnotation(ServantCodec.class);
@@ -221,7 +239,7 @@ public class AppContextImpl implements AppContext {
             if (codecClass != null) {
                 Constructor<? extends Codec> constructor;
                 try {
-                    constructor = codecClass.getConstructor(new Class[] { String.class });
+                    constructor = codecClass.getConstructor(new Class[] {String.class});
                     codec = constructor.newInstance(serverCfg.getCharsetName());
                 } catch (Exception e) {
                     throw new InstantiationException("error occurred on create codec, codec=" + codecClass.getName());
@@ -231,6 +249,7 @@ public class AppContextImpl implements AppContext {
         return codec;
     }
 
+    // TODO: 17/4/15 by zmyer
     private void loadAppContextListeners(ArrayList<XMLConfigElement> elements) {
         for (XMLConfigElement element : elements) {
             if ("listener".equals(element.getName())) {
@@ -251,6 +270,7 @@ public class AppContextImpl implements AppContext {
         }
     }
 
+    // TODO: 17/4/15 by zmyer
     protected URL[] findURLClassPath() {
         final List<URL> urls = new ArrayList<URL>();
 
@@ -279,26 +299,32 @@ public class AppContextImpl implements AppContext {
         return urls.toArray(new URL[urls.size()]);
     }
 
+    // TODO: 17/4/15 by zmyer
     private String getChildNodeValue(XMLConfigElement element, String nodeName) {
-        if (element == null) return null;
+        if (element == null)
+            return null;
 
         XMLConfigElement childElement = element.getChildByName(nodeName);
 
-        if (childElement == null) return null;
+        if (childElement == null)
+            return null;
 
         return StringUtils.trim(childElement.getContent());
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public String getInitParameter(String name) {
         return contextParams.get(name);
     }
 
+    // TODO: 17/4/15 by zmyer
     @Override
     public String name() {
         return this.name;
     }
 
+    // TODO: 17/4/15 by zmyer
     private void initServants() {
         for (String skeletonName : skeletonMap.keySet()) {
             ServantHomeSkeleton skeleton = skeletonMap.get(skeletonName);

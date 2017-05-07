@@ -19,6 +19,7 @@ package com.qq.tars.rpc.protocol;
 import com.qq.tars.net.core.Response;
 import com.qq.tars.net.core.Session;
 
+// TODO: 17/4/15 by zmyer
 public abstract class ServantResponse extends Response {
 
     public ServantResponse(Session session) {
