@@ -69,18 +69,25 @@ public class TarsServantProcessor extends Processor {
         String remark = "";
 
         try {
-            //读取类加载器
+            //类加载器
             oldClassLoader = Thread.currentThread().getContextClassLoader();
             request = (TarsServantRequest) req;
+            //创建应答的消息
             response = createResponse(request, session);
+            //设置应答消息的ticket编号
             response.setTicketNumber(req.getTicketNumber());
 
             if (response.getRet() != TarsHelper.SERVERSUCCESS
                 || TarsHelper.isPing(request.getFunctionName())) {
                 return response;
             }
-            int maxWaitingTimeInQueue = ConfigurationManager.getInstance().getserverConfig().getServantAdapterConfMap().get(request.getServantName()).getQueueTimeout();
+            //最大的等待时间
+            int maxWaitingTimeInQueue = ConfigurationManager.getInstance()
+                .getserverConfig().getServantAdapterConfMap()
+                .get(request.getServantName()).getQueueTimeout();
+            //计算请求在队列里面等待的时间
             waitingTime = (int) (startTime - req.getBornTime());
+            //如果超时了,则直接抛出异常
             if (waitingTime > maxWaitingTimeInQueue) {
                 throw new TarsException("Wait too long, server busy.");
             }
@@ -120,9 +127,11 @@ public class TarsServantProcessor extends Processor {
             if (response.isAsyncMode()) {
                 try {
                     //读取上下文对象
-                    Context<TarsServantRequest, TarsServantResponse> context = ContextManager.getContext();
+                    Context<TarsServantRequest, TarsServantResponse> context =
+                        ContextManager.getContext();
                     //读取异步上下文对象
-                    AsyncContext aContext = context.getAttribute(AsyncContext.PORTAL_CAP_ASYNC_CONTEXT_ATTRIBUTE);
+                    AsyncContext aContext =
+                        context.getAttribute(AsyncContext.PORTAL_CAP_ASYNC_CONTEXT_ATTRIBUTE);
                     if (aContext != null)
                         //开始写入异常对象
                         aContext.writeException(cause);
@@ -137,32 +146,38 @@ public class TarsServantProcessor extends Processor {
                 remark = cause.toString();
             }
         } finally {
+            //还原之前的类加载器
             if (oldClassLoader != null) {
                 Thread.currentThread().setContextClassLoader(oldClassLoader);
             }
+            //及时释放掉本次的调用上下文对象
             ContextManager.releaseContext();
             if (!response.isAsyncMode()) {
                 printServiceFlowLog(flowLogger, request, response.getRet(), (System.currentTimeMillis() - startTime), remark);
             }
-
+            //报告本次调用的耗时情况
             OmServiceMngr.getInstance().reportWaitingTimeProperty(waitingTime);
+            //报告本次调用基本信息
             reportServerStat(request, response, startTime);
         }
         return response;
     }
 
     // TODO: 17/4/15 by zmyer
-    private void reportServerStat(TarsServantRequest request, TarsServantResponse response, long startTime) {
+    private void reportServerStat(TarsServantRequest request, TarsServantResponse response,
+        long startTime) {
         if (request.getVersion() == TarsHelper.VERSION2 || request.getVersion() == TarsHelper.VERSION3) {
+            //报告服务器统计信息
             reportServerStat(Constants.TARS_TUP_CLIENT, request, response, startTime);
         } else if (request.getMessageType() == TarsHelper.ONEWAY) {
+            //报告单向调用服务器统计信息
             reportServerStat(Constants.TARS_ONE_WAY_CLIENT, request, response, startTime);
         }
     }
 
     // TODO: 17/4/15 by zmyer
-    private void reportServerStat(String moduleName, TarsServantRequest request, TarsServantResponse response,
-        long startTime) {
+    private void reportServerStat(String moduleName, TarsServantRequest request,
+        TarsServantResponse response, long startTime) {
         ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
         ServantAdapterConfig servantAdapterConfig = serverConfig.getServantAdapterConfMap().get(request.getServantName());
         if (servantAdapterConfig == null) {
@@ -170,12 +185,18 @@ public class TarsServantProcessor extends Processor {
         }
         Endpoint serverEndpoint = servantAdapterConfig.getEndpoint();
         String masterIp = request.getIoSession().getRemoteIp();
-        int result = response.getRet() == TarsHelper.SERVERSUCCESS ? Constants.INVOKE_STATUS_SUCC : Constants.INVOKE_STATUS_EXEC;
-        InvokeStatHelper.getInstance().addProxyStat(request.getServantName()).addInvokeTime(moduleName, request.getServantName(), serverConfig.getCommunicatorConfig().getSetDivision(), request.getFunctionName(), (masterIp == null ? "0.0.0.0" : masterIp), serverEndpoint.host(), serverEndpoint.port(), result, (System.currentTimeMillis() - startTime));
+        int result = response.getRet() == TarsHelper.SERVERSUCCESS ?
+            Constants.INVOKE_STATUS_SUCC : Constants.INVOKE_STATUS_EXEC;
+        //进行数据统计
+        InvokeStatHelper.getInstance().addProxyStat(request.getServantName()).addInvokeTime(moduleName,
+            request.getServantName(), serverConfig.getCommunicatorConfig().getSetDivision(),
+            request.getFunctionName(), (masterIp == null ? "0.0.0.0" : masterIp),
+            serverEndpoint.host(), serverEndpoint.port(), result, (System.currentTimeMillis() - startTime));
     }
 
     // TODO: 17/4/15 by zmyer
-    public static void printServiceFlowLog(Logger logger, TarsServantRequest request, int status, long cost,
+    public static void printServiceFlowLog(Logger logger, TarsServantRequest request, int status,
+        long cost,
         String remark) {
         if (status == TarsHelper.SERVERSUCCESS && !isFlowLogEnable())
             return;

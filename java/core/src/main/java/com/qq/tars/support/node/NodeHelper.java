@@ -47,16 +47,20 @@ public class NodeHelper {
         communicator = comm;
     }
 
+    // TODO: 17/5/22 by zmyer
     public void keepAlive() {
         try {
             if (communicator == null) {
                 return;
             }
+            //获取节点对象
             String node = ConfigurationManager.getInstance().getserverConfig().getNode();
             if (StringUtils.isEmpty(node)) {
                 return;
             }
+            //根据节点对象,创建服务器代理对象
             ServerFPrx nodePrx = communicator.stringToProxy(ServerFPrx.class, node);
+            //开始异步发送心跳信息
             nodePrx.async_keepAlive(null, si);
         } catch (Throwable t) {
             OmLogger.record("NodeHelper|keepAlive|error", t);

@@ -101,7 +101,6 @@ public class TaskThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecu
     protected void afterExecute(Runnable r, Throwable t) {
         //递减提交的任务数量
         submittedCount.decrementAndGet();
-
         if (t == null) {
             stopCurrentThreadIfNeeded();
         }

@@ -80,12 +80,15 @@ public final class Communicator {
 
     // TODO: 17/4/15 by zmyer
     @SuppressWarnings("unchecked")
-    private <T> T stringToProxy(Class<T> clazz, String objName, ServantProxyConfig servantProxyConfig,
-        LoadBalance loadBalance, ProtocolInvoker<T> protocolInvoker) throws CommunicatorConfigException {
+    private <T> T stringToProxy(Class<T> clazz, String objName,
+        ServantProxyConfig servantProxyConfig,
+        LoadBalance loadBalance, ProtocolInvoker<T> protocolInvoker)
+        throws CommunicatorConfigException {
         if (!inited.get()) {
             throw new CommunicatorConfigException("communicator uninitialized!");
         }
-        return (T) getServantProxyFactory().getServantProxy(clazz, objName, servantProxyConfig, loadBalance, protocolInvoker);
+        return (T) getServantProxyFactory().getServantProxy(clazz, objName,
+            servantProxyConfig, loadBalance, protocolInvoker);
     }
 
     // TODO: 17/4/15 by zmyer

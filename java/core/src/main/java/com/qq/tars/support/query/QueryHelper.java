@@ -32,26 +32,30 @@ public final class QueryHelper {
 
     private final Communicator communicator;
 
+    // TODO: 17/5/22 by zmyer
     public QueryHelper(Communicator communicator) {
         this.communicator = communicator;
     }
 
+    // TODO: 17/5/22 by zmyer
     public List<EndpointF> findObjectById(String objName) {
         return getPrx().findObjectById(objName);
     }
 
+    // TODO: 17/5/22 by zmyer
     private QueryFPrx getPrx() {
-        QueryFPrx prx = communicator.stringToProxy(QueryFPrx.class, communicator.getCommunicatorConfig().getLocator());
-        return prx;
+        return communicator.stringToProxy(QueryFPrx.class,
+            communicator.getCommunicatorConfig().getLocator());
     }
 
     // TODO: 17/4/18 by zmyer
     public String getServerNodes(ServantProxyConfig config) {
+        //创建查询代理对象
         QueryFPrx queryProxy = getPrx();
         String name = config.getSimpleObjectName();
         Holder<List<EndpointF>> activeEp = new Holder<List<EndpointF>>(new ArrayList<EndpointF>());
         Holder<List<EndpointF>> inactiveEp = new Holder<List<EndpointF>>(new ArrayList<EndpointF>());
-        int ret = TarsHelper.SERVERSUCCESS;
+        int ret;
         if (config.isEnableSet()) {
             ret = queryProxy.findObjectByIdInSameSet(name, config.getSetDivision(), activeEp, inactiveEp);
         } else {
@@ -62,7 +66,7 @@ public final class QueryHelper {
             return null;
         }
 
-        StringBuffer value = new StringBuffer();
+        StringBuilder value = new StringBuilder();
         if (activeEp.value != null && !activeEp.value.isEmpty()) {
             for (EndpointF endpointF : activeEp.value) {
                 if (value.length() > 0) {
@@ -80,7 +84,7 @@ public final class QueryHelper {
     }
 
     private String toFormatString(EndpointF endpointF, boolean active) {
-        StringBuffer value = new StringBuffer();
+        StringBuilder value = new StringBuilder();
         if (!(StringUtils.isEmpty(endpointF.host) || endpointF.port <= 0)) {
             value.append(endpointF.istcp == 0 ? "udp" : "tcp").append(" ");
             value.append("-h").append(" ").append(endpointF.host).append(" ");

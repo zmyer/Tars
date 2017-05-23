@@ -16,27 +16,30 @@
 
 package com.qq.tars.support.stat;
 
+import com.qq.tars.client.ClientVersion;
+import com.qq.tars.common.util.StringUtils;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
-import com.qq.tars.client.ClientVersion;
-import com.qq.tars.common.util.StringUtils;
-
+// TODO: 17/5/22 by zmyer
 public class ProxyStatUtils {
 
     public final static int MAX_MASTER_NAME_LEN = 127;
 
-    public static ProxyStatHead getHead(String masterName, String slaveName, String interfaceName, String masterIp,
-                                        String slaveIp, int slavePort, int returnValue, String masterSetName,
-                                        String masterSetArea, String masterSetID, String slaveSetDivision) {
+    // TODO: 17/5/22 by zmyer
+    public static ProxyStatHead getHead(String masterName, String slaveName,
+        String interfaceName, String masterIp,
+        String slaveIp, int slavePort, int returnValue, String masterSetName,
+        String masterSetArea, String masterSetID, String slaveSetDivision) {
         if (masterSetName == null || masterSetName.length() == 0) {
             masterName = masterName + "@" + ClientVersion.getVersion();
         } else {
             String shortMasterName = getShortModuleName(masterName);
-            masterName = masterSetName + masterSetArea + masterSetID + shortMasterName + "@" + ClientVersion.getVersion();
+            masterName = masterSetName + masterSetArea + masterSetID +
+                shortMasterName + "@" + ClientVersion.getVersion();
         }
 
         String slaveSetName = "";
@@ -52,8 +55,10 @@ public class ProxyStatUtils {
                 slaveSetID = tempStrs[2];
                 setExist = true;
 
-                String shortSlaveName = getShortModuleName(trimAndLimit(slaveName, MAX_MASTER_NAME_LEN));
-                slaveName = slaveSetName + slaveSetArea + slaveSetID + "." + shortSlaveName;
+                String shortSlaveName = getShortModuleName(trimAndLimit(slaveName,
+                    MAX_MASTER_NAME_LEN));
+                slaveName = slaveSetName + slaveSetArea + slaveSetID + "."
+                    + shortSlaveName;
             }
         }
 
@@ -61,10 +66,13 @@ public class ProxyStatUtils {
             slaveName = trimAndLimit(slaveName, MAX_MASTER_NAME_LEN);
         }
 
-        ProxyStatHead head = new ProxyStatHead(masterName, slaveName, interfaceName, masterIp, slaveIp, slavePort, returnValue, slaveSetName, slaveSetArea, slaveSetID, "");
+        ProxyStatHead head = new ProxyStatHead(masterName, slaveName,
+            interfaceName, masterIp, slaveIp, slavePort, returnValue,
+            slaveSetName, slaveSetArea, slaveSetID, "");
         return head;
     }
 
+    // TODO: 17/5/22 by zmyer
     private static String getShortModuleName(String moduleName) {
         String shortModuleName = "";
         if (moduleName != null) {
@@ -76,6 +84,7 @@ public class ProxyStatUtils {
         return shortModuleName;
     }
 
+    // TODO: 17/5/22 by zmyer
     private static String trimAndLimit(String str, int limit) {
         String ret = "";
         if (str != null) {
@@ -91,13 +100,14 @@ public class ProxyStatUtils {
     private static String cacheIP = null;
     private static final Object cacheLock = new Object();
 
+    // TODO: 17/5/22 by zmyer
     public static String getLocalIP() {
         if (cacheIP == null) {
             synchronized (cacheLock) {
                 if (cacheIP == null) {
                     try {
                         cacheIP = getLocalIPByNetworkInterface();
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     if (cacheIP == null) {
                         try {
@@ -112,11 +122,13 @@ public class ProxyStatUtils {
         return cacheIP;
     }
 
+    // TODO: 17/5/22 by zmyer
     private static String getLocalIPByNetworkInterface() throws Exception {
         Enumeration<NetworkInterface> enumeration = NetworkInterface.getNetworkInterfaces();
         while (enumeration.hasMoreElements()) {
             NetworkInterface networkInterface = enumeration.nextElement();
-            if (networkInterface.isUp() && !networkInterface.isVirtual() && !networkInterface.isLoopback()) {
+            if (networkInterface.isUp() && !networkInterface.isVirtual()
+                && !networkInterface.isLoopback()) {
                 Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
                 while (addresses.hasMoreElements()) {
                     InetAddress inetAddress = addresses.nextElement();

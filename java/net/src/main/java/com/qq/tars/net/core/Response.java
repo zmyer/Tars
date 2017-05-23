@@ -16,10 +16,9 @@
 
 package com.qq.tars.net.core;
 
-import java.io.IOException;
-
 import com.qq.tars.net.client.ticket.Ticket;
 import com.qq.tars.net.protocol.ProtocolException;
+import java.io.IOException;
 
 // TODO: 17/4/15 by zmyer
 public abstract class Response {
@@ -51,9 +50,13 @@ public abstract class Response {
         this.asyncMode = true;
     }
 
+    // TODO: 17/5/22 by zmyer
     public void asyncCallEnd() throws IOException {
-        if (!this.asyncMode) throw new IllegalStateException("The response is not async mode.");
+        //如果是非异步模式,则直接异常
+        if (!this.asyncMode)
+            throw new IllegalStateException("The response is not async mode.");
         ensureNotCommitted();
+        //返回结果
         session.write(this);
     }
 
@@ -65,8 +68,10 @@ public abstract class Response {
         return this.ticketNum;
     }
 
+    // TODO: 17/5/22 by zmyer
     private synchronized void ensureNotCommitted() {
-        if (commited) throw new IllegalStateException("Not allowed after response has committed.");
+        if (commited)
+            throw new IllegalStateException("Not allowed after response has committed.");
         this.commited = true;
     }
 }

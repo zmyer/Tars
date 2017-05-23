@@ -56,6 +56,7 @@ public class ConfigHelper {
         return 0;
     }
 
+    // TODO: 17/5/22 by zmyer
     public int setConfigInfo(Communicator comm, String app, String serverName, String basePath) {
         return setConfigInfo(comm, app, serverName, basePath, 5);
     }

@@ -58,7 +58,8 @@ public class AppContextImpl implements AppContext {
     //是否准备完毕
     private boolean ready = true;
     //
-    private ConcurrentHashMap<String, ServantHomeSkeleton> skeletonMap = new ConcurrentHashMap<String, ServantHomeSkeleton>();
+    private ConcurrentHashMap<String, ServantHomeSkeleton> skeletonMap =
+        new ConcurrentHashMap<String, ServantHomeSkeleton>();
     //上下文参数映射表
     private HashMap<String, String> contextParams = new HashMap<String, String>();
     //app监听器列表

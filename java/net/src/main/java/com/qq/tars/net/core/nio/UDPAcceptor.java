@@ -16,15 +16,16 @@
 
 package com.qq.tars.net.core.nio;
 
+import com.qq.tars.net.core.Session.SessionStatus;
 import java.io.IOException;
 import java.nio.channels.SelectionKey;
 
-import com.qq.tars.net.core.Session.SessionStatus;
-
+// TODO: 17/5/22 by zmyer
 public class UDPAcceptor extends Acceptor {
 
     private int bufferSize;
 
+    // TODO: 17/5/22 by zmyer
     public UDPAcceptor(SelectorManager selectorManager) {
         super(selectorManager);
         String s = System.getProperty("com.qq.nami.server.udp.bufferSize", "4096");
@@ -35,16 +36,19 @@ public class UDPAcceptor extends Acceptor {
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     @Override
     public void handleConnectEvent(SelectionKey key) throws IOException {
         throw new IllegalStateException("UDP can't handle OP_CONNECT event");
     }
 
+    // TODO: 17/5/22 by zmyer
     @Override
     public void handleAcceptEvent(SelectionKey key) throws IOException {
         throw new IllegalStateException("UDP can't handle OP_ACCEPT event");
     }
 
+    // TODO: 17/5/22 by zmyer
     @Override
     public void handleReadEvent(SelectionKey key) throws IOException {
         UDPSession session = null;
@@ -64,6 +68,7 @@ public class UDPAcceptor extends Acceptor {
 
     }
 
+    // TODO: 17/5/22 by zmyer
     @Override
     public void handleWriteEvent(SelectionKey key) throws IOException {
     }

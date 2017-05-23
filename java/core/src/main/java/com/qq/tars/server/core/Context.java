@@ -21,6 +21,7 @@ import com.qq.tars.net.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
+// TODO: 17/5/22 by zmyer
 public final class Context<REQ extends Request, RESP extends Response> {
 
     private REQ request = null;

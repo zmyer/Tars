@@ -16,18 +16,19 @@
 
 package com.qq.tars.support.stat;
 
+import com.qq.tars.common.util.Constants;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.qq.tars.common.util.Constants;
-
+// TODO: 17/5/22 by zmyer
 public class ProxyStat {
 
     private ConcurrentHashMap<ProxyStatHead, ProxyStatBody> stat = new ConcurrentHashMap<ProxyStatHead, ProxyStatBody>();
 
     public static final List<Integer> DEFAULT_TIME_STAT_INTERVAL = new ArrayList<Integer>();
+
     static {
         DEFAULT_TIME_STAT_INTERVAL.add(5);
         DEFAULT_TIME_STAT_INTERVAL.add(10);
@@ -43,12 +44,14 @@ public class ProxyStat {
         DEFAULT_TIME_STAT_INTERVAL.add(100000);
     }
 
+    // TODO: 17/5/22 by zmyer
     public void setTimeStatInterval(ProxyStatHead head, List<Integer> timeStatInterval) {
         if (stat.containsKey(head)) {
             stat.get(head).setTimeStatInterval(timeStatInterval);
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     private ProxyStatBody getStatBody(ProxyStatHead head) {
         ProxyStatBody body = stat.get(head);
         if (body == null) {
@@ -58,6 +61,7 @@ public class ProxyStat {
         return body;
     }
 
+    // TODO: 17/5/22 by zmyer
     public void addInvokeTime(ProxyStatHead head, long costTimeMill, int result) {
         if (result == Constants.INVOKE_STATUS_SUCC) {
             getStatBody(head).onCallFinished(costTimeMill, Constants.INVOKE_STATUS_SUCC);
@@ -68,18 +72,26 @@ public class ProxyStat {
         }
     }
 
-    public void addInvokeTime(String moduleName, String objectName, String setDivision, String methodName,
-                              String slaveIp, int slavePort, int result, long costTimeMill) {
-        ProxyStatHead head = ProxyStatUtils.getHead(moduleName, objectName, methodName, ProxyStatUtils.getLocalIP(), slaveIp, slavePort, result, null, null, null, setDivision);
+    // TODO: 17/5/22 by zmyer
+    public void addInvokeTime(String moduleName, String objectName, String setDivision,
+        String methodName,
+        String slaveIp, int slavePort, int result, long costTimeMill) {
+        ProxyStatHead head = ProxyStatUtils.getHead(moduleName, objectName,
+            methodName, ProxyStatUtils.getLocalIP(), slaveIp, slavePort,
+            result, null, null, null, setDivision);
         addInvokeTime(head, costTimeMill, result);
     }
 
-    public void addInvokeTime(String moduleName, String objectName, String setDivision, String methodName,
-                              String masterIp, String slaveIp, int slavePort, int result, long costTimeMill) {
-        ProxyStatHead head = ProxyStatUtils.getHead(moduleName, objectName, methodName, masterIp, slaveIp, slavePort, result, null, null, null, setDivision);
+    // TODO: 17/5/22 by zmyer
+    public void addInvokeTime(String moduleName, String objectName, String setDivision,
+        String methodName,
+        String masterIp, String slaveIp, int slavePort, int result, long costTimeMill) {
+        ProxyStatHead head = ProxyStatUtils.getHead(moduleName, objectName, methodName,
+            masterIp, slaveIp, slavePort, result, null, null, null, setDivision);
         addInvokeTime(head, costTimeMill, result);
     }
 
+    // TODO: 17/5/22 by zmyer
     public List<Integer> getStatIntervals() {
         Collection<ProxyStatBody> collection = stat.values();
         if (!collection.isEmpty()) {
@@ -92,14 +104,17 @@ public class ProxyStat {
         return DEFAULT_TIME_STAT_INTERVAL;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ConcurrentHashMap<ProxyStatHead, ProxyStatBody> getStats() {
         return this.stat;
     }
 
+    // TODO: 17/5/22 by zmyer
     public int size() {
         return this.stat.size();
     }
 
+    // TODO: 17/5/22 by zmyer
     public boolean isEmpty() {
         return this.stat.isEmpty();
     }

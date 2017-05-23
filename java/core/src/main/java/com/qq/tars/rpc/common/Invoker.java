@@ -16,6 +16,7 @@
 
 package com.qq.tars.rpc.common;
 
+// TODO: 17/5/22 by zmyer
 public interface Invoker<T> {
 
     Url getUrl();

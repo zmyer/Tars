@@ -21,52 +21,52 @@ import org.antlr.runtime.tree.CommonTree;
 
 public abstract class TarsType extends CommonTree {
 
-	private final String typeName;
+    private final String typeName;
 
-	public TarsType(int tokenType, String typeName) {
-		super(new CommonToken(tokenType));
-		this.typeName = typeName;
-	}
+    public TarsType(int tokenType, String typeName) {
+        super(new CommonToken(tokenType));
+        this.typeName = typeName;
+    }
 
-	public TarsType(Token token, String typeName) {
-		super(token);
-		this.typeName = typeName;
-	}
+    public TarsType(Token token, String typeName) {
+        super(token);
+        this.typeName = typeName;
+    }
 
-	public String typeName() {
-		return typeName;
-	}
+    public String typeName() {
+        return typeName;
+    }
 
-	public boolean isPrimitive() {
-		return false;
-	}
+    public boolean isPrimitive() {
+        return false;
+    }
 
-	public boolean isVector() {
-		return false;
-	}
+    public boolean isVector() {
+        return false;
+    }
 
-	public boolean isMap() {
-		return false;
-	}
+    public boolean isMap() {
+        return false;
+    }
 
-	public boolean isCustom() {
-		return false;
-	}
+    public boolean isCustom() {
+        return false;
+    }
 
-	public TarsPrimitiveType asPrimitive() {
-		return null;
-	}
+    public TarsPrimitiveType asPrimitive() {
+        return null;
+    }
 
-	public TarsVectorType asVector() {
-		return null;
-	}
+    public TarsVectorType asVector() {
+        return null;
+    }
 
-	public TarsMapType asMap() {
-		return null;
-	}
+    public TarsMapType asMap() {
+        return null;
+    }
 
-	public TarsCustomType asCustom() {
-		return null;
-	}
+    public TarsCustomType asCustom() {
+        return null;
+    }
 
 }

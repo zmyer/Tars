@@ -20,114 +20,116 @@
 
 package com.qq.tars.support.node.prx;
 
-import com.qq.tars.protocol.util.*;
-import com.qq.tars.protocol.annotation.*;
-import com.qq.tars.protocol.tars.*;
-import com.qq.tars.protocol.tars.annotation.*;
+import com.qq.tars.protocol.tars.TarsInputStream;
+import com.qq.tars.protocol.tars.TarsOutputStream;
+import com.qq.tars.protocol.tars.annotation.TarsStruct;
+import com.qq.tars.protocol.tars.annotation.TarsStructProperty;
+import com.qq.tars.protocol.util.TarsUtil;
 
+// TODO: 17/5/22 by zmyer
 @TarsStruct
 public class ServerInfo {
 
-	@TarsStructProperty(order = 0, isRequire = true)
-	public String application = "";
-	@TarsStructProperty(order = 1, isRequire = true)
-	public String serverName = "";
-	@TarsStructProperty(order = 2, isRequire = true)
-	public int pid = 0;
-	@TarsStructProperty(order = 3, isRequire = false)
-	public String adapter = "";
+    @TarsStructProperty(order = 0, isRequire = true)
+    public String application = "";
+    @TarsStructProperty(order = 1, isRequire = true)
+    public String serverName = "";
+    @TarsStructProperty(order = 2, isRequire = true)
+    public int pid = 0;
+    @TarsStructProperty(order = 3, isRequire = false)
+    public String adapter = "";
 
-	public String getApplication() {
-		return application;
-	}
+    public String getApplication() {
+        return application;
+    }
 
-	public void setApplication(String application) {
-		this.application = application;
-	}
+    public void setApplication(String application) {
+        this.application = application;
+    }
 
-	public String getServerName() {
-		return serverName;
-	}
+    public String getServerName() {
+        return serverName;
+    }
 
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
-	}
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
+    }
 
-	public int getPid() {
-		return pid;
-	}
+    public int getPid() {
+        return pid;
+    }
 
-	public void setPid(int pid) {
-		this.pid = pid;
-	}
+    public void setPid(int pid) {
+        this.pid = pid;
+    }
 
-	public String getAdapter() {
-		return adapter;
-	}
+    public String getAdapter() {
+        return adapter;
+    }
 
-	public void setAdapter(String adapter) {
-		this.adapter = adapter;
-	}
+    public void setAdapter(String adapter) {
+        this.adapter = adapter;
+    }
 
-	public ServerInfo() {
-	}
+    public ServerInfo() {
+    }
 
-	public ServerInfo(String application, String serverName, int pid, String adapter) {
-		this.application = application;
-		this.serverName = serverName;
-		this.pid = pid;
-		this.adapter = adapter;
-	}
+    public ServerInfo(String application, String serverName, int pid, String adapter) {
+        this.application = application;
+        this.serverName = serverName;
+        this.pid = pid;
+        this.adapter = adapter;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + TarsUtil.hashCode(application);
-		result = prime * result + TarsUtil.hashCode(serverName);
-		result = prime * result + TarsUtil.hashCode(pid);
-		result = prime * result + TarsUtil.hashCode(adapter);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + TarsUtil.hashCode(application);
+        result = prime * result + TarsUtil.hashCode(serverName);
+        result = prime * result + TarsUtil.hashCode(pid);
+        result = prime * result + TarsUtil.hashCode(adapter);
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof ServerInfo)) {
-			return false;
-		}
-		ServerInfo other = (ServerInfo) obj;
-		return (
-			TarsUtil.equals(application, other.application) &&
-			TarsUtil.equals(serverName, other.serverName) &&
-			TarsUtil.equals(pid, other.pid) &&
-			TarsUtil.equals(adapter, other.adapter) 
-		);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof ServerInfo)) {
+            return false;
+        }
+        ServerInfo other = (ServerInfo) obj;
+        return (
+            TarsUtil.equals(application, other.application) &&
+                TarsUtil.equals(serverName, other.serverName) &&
+                TarsUtil.equals(pid, other.pid) &&
+                TarsUtil.equals(adapter, other.adapter)
+        );
+    }
 
-	public void writeTo(TarsOutputStream _os) {
-		if (null != application) {
-			_os.write(application, 0);
-		}
-		if (null != serverName) {
-			_os.write(serverName, 1);
-		}
-		_os.write(pid, 2);
-		if (null != adapter) {
-			_os.write(adapter, 3);
-		}
-	}
+    public void writeTo(TarsOutputStream _os) {
+        if (null != application) {
+            _os.write(application, 0);
+        }
+        if (null != serverName) {
+            _os.write(serverName, 1);
+        }
+        _os.write(pid, 2);
+        if (null != adapter) {
+            _os.write(adapter, 3);
+        }
+    }
 
-	public void readFrom(TarsInputStream _is) {
-		this.application = _is.read(application, 0, true);
-		this.serverName = _is.read(serverName, 1, true);
-		this.pid = _is.read(pid, 2, true);
-		this.adapter = _is.read(adapter, 3, false);
-	}
+    public void readFrom(TarsInputStream _is) {
+        this.application = _is.read(application, 0, true);
+        this.serverName = _is.read(serverName, 1, true);
+        this.pid = _is.read(pid, 2, true);
+        this.adapter = _is.read(adapter, 3, false);
+    }
 
 }

@@ -16,14 +16,14 @@
 
 package com.qq.tars.support.property;
 
+import com.qq.tars.rpc.exc.TarsException;
+import com.qq.tars.support.property.PropertyReportHelper.Policy;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.qq.tars.rpc.exc.TarsException;
-import com.qq.tars.support.property.PropertyReportHelper.Policy;
-
+// TODO: 17/5/22 by zmyer
 public class CommonPropertyPolicy {
 
     public static class Sum implements Policy {
@@ -68,7 +68,8 @@ public class CommonPropertyPolicy {
                 if (v >= old) {
                     return;
                 }
-            } while (!this.n.compareAndSet(old, v));
+            }
+            while (!this.n.compareAndSet(old, v));
         }
 
     }
@@ -95,7 +96,8 @@ public class CommonPropertyPolicy {
                 if (v <= old) {
                     return;
                 }
-            } while (!this.n.compareAndSet(old, v));
+            }
+            while (!this.n.compareAndSet(old, v));
         }
 
     }

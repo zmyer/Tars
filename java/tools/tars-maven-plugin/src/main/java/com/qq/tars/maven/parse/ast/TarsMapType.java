@@ -19,26 +19,26 @@ import org.antlr.runtime.Token;
 
 public class TarsMapType extends TarsType {
 
-	public TarsMapType(Token token) {
-		super(token, "map");
-	}
+    public TarsMapType(Token token) {
+        super(token, "map");
+    }
 
-	@Override
-	public boolean isMap() {
-		return true;
-	}
+    @Override
+    public boolean isMap() {
+        return true;
+    }
 
-	@Override
-	public TarsMapType asMap() {
-		return this;
-	}
+    @Override
+    public TarsMapType asMap() {
+        return this;
+    }
 
-	public TarsType keyType() {
-		return (TarsType) this.getChild(0);
-	}
+    public TarsType keyType() {
+        return (TarsType) this.getChild(0);
+    }
 
-	public TarsType valueType() {
-		return (TarsType) this.getChild(1);
-	}
+    public TarsType valueType() {
+        return (TarsType) this.getChild(1);
+    }
 
 }

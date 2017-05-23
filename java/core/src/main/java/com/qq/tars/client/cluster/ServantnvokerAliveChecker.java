@@ -16,28 +16,40 @@
 
 package com.qq.tars.client.cluster;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.qq.tars.client.ServantProxyConfig;
 import com.qq.tars.rpc.common.Url;
+import java.util.concurrent.ConcurrentHashMap;
 
+// TODO: 17/5/22 by zmyer
 public class ServantnvokerAliveChecker {
 
-    private static final ConcurrentHashMap<String, ServantInvokerAliveStat> cache = new ConcurrentHashMap<String, ServantInvokerAliveStat>();
+    //服务调用对象存活映射表
+    private static final ConcurrentHashMap<String, ServantInvokerAliveStat> cache =
+        new ConcurrentHashMap<String, ServantInvokerAliveStat>();
 
+    // TODO: 17/5/22 by zmyer
     public static ServantInvokerAliveStat get(Url url) {
+        //url标识符
         String identity = url.toIdentityString();
+        //获取服务调用对象存活信息
         ServantInvokerAliveStat stat = cache.get(identity);
         if (stat == null) {
+            //如果不存在服务存活对象,则直接创建
             cache.putIfAbsent(identity, new ServantInvokerAliveStat(identity));
+            //获取存活对象
             stat = cache.get(identity);
         }
+        //返回存活对象
         return stat;
     }
 
+    // TODO: 17/5/22 by zmyer
     public static boolean isAlive(Url url, ServantProxyConfig config, int ret) {
+        //获取存活对象
         ServantInvokerAliveStat stat = get(url);
+        //调用完毕流程
         stat.onCallFinished(ret, config);
+        //返回是否存活
         return stat.isAlive();
     }
 }

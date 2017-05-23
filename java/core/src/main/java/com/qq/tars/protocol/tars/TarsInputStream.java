@@ -16,6 +16,8 @@
 
 package com.qq.tars.protocol.tars;
 
+import com.qq.tars.common.util.HexUtil;
+import com.qq.tars.protocol.tars.exc.TarsDecodeException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -27,9 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.qq.tars.common.util.HexUtil;
-import com.qq.tars.protocol.tars.exc.TarsDecodeException;
-
+// TODO: 17/5/22 by zmyer
 public final class TarsInputStream {
 
     private ByteBuffer bs; // 缓冲区
@@ -101,7 +101,8 @@ public final class TarsInputStream {
                 if (hd.type == TarsStructBase.STRUCT_END) {
                     return false;
                 }
-                if (tag <= hd.tag) return tag == hd.tag;
+                if (tag <= hd.tag)
+                    return tag == hd.tag;
                 skip(len);
                 skipField(hd.type);
             }
@@ -116,7 +117,8 @@ public final class TarsInputStream {
         do {
             readHead(hd);
             skipField(hd.type);
-        } while (hd.type != TarsStructBase.STRUCT_END);
+        }
+        while (hd.type != TarsStructBase.STRUCT_END);
     }
 
     private void skipField() {
@@ -147,7 +149,8 @@ public final class TarsInputStream {
                 break;
             case TarsStructBase.STRING1: {
                 int len = bs.get();
-                if (len < 0) len += 256;
+                if (len < 0)
+                    len += 256;
                 skip(len);
                 break;
             }
@@ -341,20 +344,22 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.STRING1: {
                     int len = bs.get();
-                    if (len < 0) len += 256;
+                    if (len < 0)
+                        len += 256;
                     byte[] ss = new byte[len];
                     bs.get(ss);
                     s = HexUtil.bytes2HexStr(ss);
                 }
-                    break;
+                break;
                 case TarsStructBase.STRING4: {
                     int len = bs.getInt();
-                    if (len > TarsStructBase.MAX_STRING_LENGTH || len < 0) throw new TarsDecodeException("String too long: " + len);
+                    if (len > TarsStructBase.MAX_STRING_LENGTH || len < 0)
+                        throw new TarsDecodeException("String too long: " + len);
                     byte[] ss = new byte[len];
                     bs.get(ss);
                     s = HexUtil.bytes2HexStr(ss);
                 }
-                    break;
+                break;
                 default:
                     throw new TarsDecodeException("type mismatch.");
             }
@@ -371,7 +376,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.STRING1: {
                     int len = bs.get();
-                    if (len < 0) len += 256;
+                    if (len < 0)
+                        len += 256;
                     byte[] ss = new byte[len];
                     bs.get(ss);
                     try {
@@ -380,10 +386,11 @@ public final class TarsInputStream {
                         s = new String(ss);
                     }
                 }
-                    break;
+                break;
                 case TarsStructBase.STRING4: {
                     int len = bs.getInt();
-                    if (len > TarsStructBase.MAX_STRING_LENGTH || len < 0) throw new TarsDecodeException("String too long: " + len);
+                    if (len > TarsStructBase.MAX_STRING_LENGTH || len < 0)
+                        throw new TarsDecodeException("String too long: " + len);
                     byte[] ss = new byte[len];
                     bs.get(ss);
                     try {
@@ -392,7 +399,7 @@ public final class TarsInputStream {
                         s = new String(ss);
                     }
                 }
-                    break;
+                break;
                 default:
                     throw new TarsDecodeException("type mismatch.");
             }
@@ -410,7 +417,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.STRING1: {
                     int len = bs.get();
-                    if (len < 0) len += 256;
+                    if (len < 0)
+                        len += 256;
                     byte[] ss = new byte[len];
                     bs.get(ss);
                     try {
@@ -419,10 +427,11 @@ public final class TarsInputStream {
                         s = new String(ss);
                     }
                 }
-                    break;
+                break;
                 case TarsStructBase.STRING4: {
                     int len = bs.getInt();
-                    if (len > TarsStructBase.MAX_STRING_LENGTH || len < 0) throw new TarsDecodeException("String too long: " + len);
+                    if (len > TarsStructBase.MAX_STRING_LENGTH || len < 0)
+                        throw new TarsDecodeException("String too long: " + len);
                     byte[] ss = new byte[len];
                     bs.get(ss);
                     try {
@@ -431,7 +440,7 @@ public final class TarsInputStream {
                         s = new String(ss);
                     }
                 }
-                    break;
+                break;
                 default:
                     throw new TarsDecodeException("type mismatch.");
             }
@@ -453,14 +462,15 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.MAP: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     for (int i = 0; i < size; ++i) {
                         String k = readString(0, true);
                         String v = readString(1, true);
                         mr.put(k, v);
                     }
                 }
-                    break;
+                break;
                 default:
                     throw new TarsDecodeException("type mismatch.");
             }
@@ -474,7 +484,7 @@ public final class TarsInputStream {
         return (HashMap<K, V>) readMap(new HashMap<K, V>(), m, tag, isRequire);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private <K, V> Map<K, V> readMap(Map<K, V> mr, Map<K, V> m, int tag, boolean isRequire) {
         if (m == null || m.isEmpty()) {
             return new HashMap();
@@ -491,14 +501,15 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.MAP: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     for (int i = 0; i < size; ++i) {
                         K k = (K) read(mk, 0, true);
                         V v = (V) read(mv, 1, true);
                         mr.put(k, v);
                     }
                 }
-                    break;
+                break;
                 default:
                     throw new TarsDecodeException("type mismatch.");
             }
@@ -508,7 +519,7 @@ public final class TarsInputStream {
         return mr;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public List readList(int tag, boolean isRequire) {
         List lr = new ArrayList();
         if (skipToTag(tag)) {
@@ -517,7 +528,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     for (int i = 0; i < size; ++i) {
                         HeadData subH = new HeadData();
                         readHead(subH);
@@ -542,22 +554,23 @@ public final class TarsInputStream {
                                 break;
                             case TarsStructBase.STRING1: {
                                 int len = bs.get();
-                                if (len < 0) len += 256;
+                                if (len < 0)
+                                    len += 256;
                                 skip(len);
                             }
-                                break;
+                            break;
                             case TarsStructBase.STRING4: {
                                 skip(bs.getInt());
                             }
-                                break;
+                            break;
                             case TarsStructBase.MAP: {
 
                             }
-                                break;
+                            break;
                             case TarsStructBase.LIST: {
 
                             }
-                                break;
+                            break;
                             case TarsStructBase.STRUCT_BEGIN:
                                 try {
                                     Class<?> newoneClass = Class.forName(TarsStructBase.class.getName());
@@ -578,7 +591,7 @@ public final class TarsInputStream {
                         }
                     }
                 }
-                    break;
+                break;
                 default:
                     throw new TarsDecodeException("type mismatch.");
             }
@@ -596,7 +609,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new boolean[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -624,14 +638,16 @@ public final class TarsInputStream {
                         throw new TarsDecodeException("type mismatch, tag: " + tag + ", type: " + hd.type + ", " + hh.type);
                     }
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("invalid size, tag: " + tag + ", type: " + hd.type + ", " + hh.type + ", size: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("invalid size, tag: " + tag + ", type: " + hd.type + ", " + hh.type + ", size: " + size);
                     lr = new byte[size];
                     bs.get(lr);
                     break;
                 }
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new byte[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -654,7 +670,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new short[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -677,7 +694,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new int[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -700,7 +718,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new long[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -723,7 +742,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new float[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -746,7 +766,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     lr = new double[size];
                     for (int i = 0; i < size; ++i)
                         lr[i] = read(lr[0], 0, true);
@@ -762,7 +783,8 @@ public final class TarsInputStream {
     }
 
     public <T> T[] readArray(T[] l, int tag, boolean isRequire) {
-        if (l == null || l.length == 0) throw new TarsDecodeException("unable to get type of key and value.");
+        if (l == null || l.length == 0)
+            throw new TarsDecodeException("unable to get type of key and value.");
         return readArrayImpl(l[0], tag, isRequire);
     }
 
@@ -771,7 +793,8 @@ public final class TarsInputStream {
             return new ArrayList<T>();
         }
         T[] tt = readArrayImpl(l.get(0), tag, isRequire);
-        if (tt == null) return null;
+        if (tt == null)
+            return null;
         ArrayList<T> ll = new ArrayList<T>();
         for (int i = 0; i < tt.length; ++i)
             ll.add(tt[i]);
@@ -786,7 +809,8 @@ public final class TarsInputStream {
             switch (hd.type) {
                 case TarsStructBase.LIST: {
                     int size = read(0, 0, true);
-                    if (size < 0) throw new TarsDecodeException("size invalid: " + size);
+                    if (size < 0)
+                        throw new TarsDecodeException("size invalid: " + size);
                     T[] lr = (T[]) Array.newInstance(mt.getClass(), size);
                     for (int i = 0; i < size; ++i) {
                         T t = (T) read(mt, 0, true);
@@ -814,7 +838,8 @@ public final class TarsInputStream {
 
             HeadData hd = new HeadData();
             readHead(hd);
-            if (hd.type != TarsStructBase.STRUCT_BEGIN) throw new TarsDecodeException("type mismatch.");
+            if (hd.type != TarsStructBase.STRUCT_BEGIN)
+                throw new TarsDecodeException("type mismatch.");
             ref.readFrom(this);
             skipToStructEnd();
         } else if (isRequire) {
@@ -834,7 +859,8 @@ public final class TarsInputStream {
 
             HeadData hd = new HeadData();
             readHead(hd);
-            if (hd.type != TarsStructBase.STRUCT_BEGIN) throw new TarsDecodeException("type mismatch.");
+            if (hd.type != TarsStructBase.STRUCT_BEGIN)
+                throw new TarsDecodeException("type mismatch.");
             ref.readFrom(this);
             skipToStructEnd();
         } else if (isRequire) {

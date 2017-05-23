@@ -16,6 +16,7 @@
 
 package com.qq.tars.net.core;
 
+// TODO: 17/5/22 by zmyer
 public interface SessionListener {
 
     public void onSessionCreated(SessionEvent se);

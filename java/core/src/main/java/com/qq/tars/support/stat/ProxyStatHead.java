@@ -16,6 +16,7 @@
 
 package com.qq.tars.support.stat;
 
+// TODO: 17/5/22 by zmyer
 public class ProxyStatHead implements Comparable<ProxyStatHead> {
 
     public String masterName = "";
@@ -30,9 +31,10 @@ public class ProxyStatHead implements Comparable<ProxyStatHead> {
     public String slaveSetID = "";
     public String tarsVersion = "";
 
-    public ProxyStatHead(String masterName, String slaveName, String interfaceName, String masterIp, String slaveIp,
-                         int slavePort, int returnValue, String slaveSetName, String slaveSetArea, String slaveSetID,
-                         String tarsVersion) {
+    public ProxyStatHead(String masterName, String slaveName,
+        String interfaceName, String masterIp, String slaveIp,
+        int slavePort, int returnValue, String slaveSetName,
+        String slaveSetArea, String slaveSetID, String tarsVersion) {
         this.masterName = masterName;
         this.slaveName = slaveName;
         this.interfaceName = interfaceName;
@@ -47,9 +49,22 @@ public class ProxyStatHead implements Comparable<ProxyStatHead> {
     }
 
     public int compareTo(ProxyStatHead o) {
-        int[] r = { com.qq.tars.protocol.util.TarsUtil.compareTo(masterName, o.masterName), com.qq.tars.protocol.util.TarsUtil.compareTo(slaveName, o.slaveName), com.qq.tars.protocol.util.TarsUtil.compareTo(interfaceName, o.interfaceName), com.qq.tars.protocol.util.TarsUtil.compareTo(masterIp, o.masterIp), com.qq.tars.protocol.util.TarsUtil.compareTo(slaveIp, o.slaveIp), com.qq.tars.protocol.util.TarsUtil.compareTo(slavePort, o.slavePort), com.qq.tars.protocol.util.TarsUtil.compareTo(returnValue, o.returnValue), com.qq.tars.protocol.util.TarsUtil.compareTo(slaveSetName, o.slaveSetName), com.qq.tars.protocol.util.TarsUtil.compareTo(slaveSetArea, o.slaveSetArea), com.qq.tars.protocol.util.TarsUtil.compareTo(slaveSetID, o.slaveSetID), com.qq.tars.protocol.util.TarsUtil.compareTo(tarsVersion, o.tarsVersion) };
-        for (int i = 0; i < r.length; ++i) {
-            if (r[i] != 0) return r[i];
+        int[] r = {
+            com.qq.tars.protocol.util.TarsUtil.compareTo(masterName, o.masterName),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(slaveName, o.slaveName),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(interfaceName, o.interfaceName),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(masterIp, o.masterIp),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(slaveIp, o.slaveIp),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(slavePort, o.slavePort),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(returnValue, o.returnValue),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(slaveSetName, o.slaveSetName),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(slaveSetArea, o.slaveSetArea),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(slaveSetID, o.slaveSetID),
+            com.qq.tars.protocol.util.TarsUtil.compareTo(tarsVersion, o.tarsVersion)
+        };
+        for (int aR : r) {
+            if (aR != 0)
+                return aR;
         }
         return 0;
     }
@@ -60,11 +75,33 @@ public class ProxyStatHead implements Comparable<ProxyStatHead> {
         }
 
         ProxyStatHead t = (ProxyStatHead) o;
-        return (com.qq.tars.protocol.util.TarsUtil.equals(masterName, t.masterName) && com.qq.tars.protocol.util.TarsUtil.equals(slaveName, t.slaveName) && com.qq.tars.protocol.util.TarsUtil.equals(interfaceName, t.interfaceName) && com.qq.tars.protocol.util.TarsUtil.equals(masterIp, t.masterIp) && com.qq.tars.protocol.util.TarsUtil.equals(slaveIp, t.slaveIp) && com.qq.tars.protocol.util.TarsUtil.equals(slavePort, t.slavePort) && com.qq.tars.protocol.util.TarsUtil.equals(returnValue, t.returnValue) && com.qq.tars.protocol.util.TarsUtil.equals(slaveSetName, t.slaveSetName) && com.qq.tars.protocol.util.TarsUtil.equals(slaveSetArea, t.slaveSetArea) && com.qq.tars.protocol.util.TarsUtil.equals(slaveSetID, t.slaveSetID) && com.qq.tars.protocol.util.TarsUtil.equals(tarsVersion, t.tarsVersion));
+        return (com.qq.tars.protocol.util.TarsUtil.equals(masterName, t.masterName)
+            && com.qq.tars.protocol.util.TarsUtil.equals(slaveName, t.slaveName)
+            && com.qq.tars.protocol.util.TarsUtil.equals(interfaceName, t.interfaceName)
+            && com.qq.tars.protocol.util.TarsUtil.equals(masterIp, t.masterIp)
+            && com.qq.tars.protocol.util.TarsUtil.equals(slaveIp, t.slaveIp)
+            && com.qq.tars.protocol.util.TarsUtil.equals(slavePort, t.slavePort)
+            && com.qq.tars.protocol.util.TarsUtil.equals(returnValue, t.returnValue)
+            && com.qq.tars.protocol.util.TarsUtil.equals(slaveSetName, t.slaveSetName)
+            && com.qq.tars.protocol.util.TarsUtil.equals(slaveSetArea, t.slaveSetArea)
+            && com.qq.tars.protocol.util.TarsUtil.equals(slaveSetID, t.slaveSetID)
+            && com.qq.tars.protocol.util.TarsUtil.equals(tarsVersion, t.tarsVersion));
     }
 
     public int hashCode() {
-        int[] hc = { com.qq.tars.protocol.util.TarsUtil.hashCode(masterName), com.qq.tars.protocol.util.TarsUtil.hashCode(slaveName), com.qq.tars.protocol.util.TarsUtil.hashCode(interfaceName), com.qq.tars.protocol.util.TarsUtil.hashCode(masterIp), com.qq.tars.protocol.util.TarsUtil.hashCode(slaveIp), com.qq.tars.protocol.util.TarsUtil.hashCode(slavePort), com.qq.tars.protocol.util.TarsUtil.hashCode(returnValue), com.qq.tars.protocol.util.TarsUtil.hashCode(slaveSetName), com.qq.tars.protocol.util.TarsUtil.hashCode(slaveSetArea), com.qq.tars.protocol.util.TarsUtil.hashCode(slaveSetID), com.qq.tars.protocol.util.TarsUtil.hashCode(tarsVersion) };
+        int[] hc = {
+            com.qq.tars.protocol.util.TarsUtil.hashCode(masterName),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(slaveName),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(interfaceName),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(masterIp),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(slaveIp),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(slavePort),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(returnValue),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(slaveSetName),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(slaveSetArea),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(slaveSetID),
+            com.qq.tars.protocol.util.TarsUtil.hashCode(tarsVersion)
+        };
         return java.util.Arrays.hashCode(hc);
     }
 

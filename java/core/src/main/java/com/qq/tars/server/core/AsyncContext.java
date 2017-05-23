@@ -24,6 +24,7 @@ import com.qq.tars.support.log.Logger;
 import com.qq.tars.support.log.Logger.LogType;
 import java.io.IOException;
 
+// TODO: 17/5/22 by zmyer
 public final class AsyncContext {
 
     private static final AppContainer container = ContainerManager.getContainer(AppContainer.class);
@@ -33,6 +34,7 @@ public final class AsyncContext {
     private Context<TarsServantRequest, TarsServantResponse> context = null;
     private Logger flowLogger = Logger.getLogger("tarsserver.log", LogType.ALL);
 
+    // TODO: 17/5/22 by zmyer
     public static AsyncContext startAsync() throws IOException {
         Context<TarsServantRequest, TarsServantResponse> context = ContextManager.getContext();
         AsyncContext aContext = new AsyncContext(context);
@@ -41,41 +43,48 @@ public final class AsyncContext {
         return aContext;
     }
 
+    // TODO: 17/5/22 by zmyer
     private AsyncContext(Context<TarsServantRequest, TarsServantResponse> context) {
         this.context = context;
     }
 
+    // TODO: 17/5/22 by zmyer
     private ServantHomeSkeleton getCapHomeSkeleton() {
         AppContextImpl appContext = container.getDefaultAppContext();
         return appContext.getCapHomeSkeleton(this.context.request().getServantName());
     }
 
+    // TODO: 17/5/22 by zmyer
     @SuppressWarnings("unchecked")
     public <T> T getAttribute(String name) {
         return (T) this.context.getAttribute(name);
     }
 
+    // TODO: 17/5/22 by zmyer
     public <T> T getAttribute(String name, T defaultValue) {
         return (T) this.context.getAttribute(name, defaultValue);
     }
 
+    // TODO: 17/5/22 by zmyer
     public <T> void setAttribute(String name, T value) {
         this.context.setAttribute(name, value);
     }
 
+    // TODO: 17/5/22 by zmyer
     public void writeException(Throwable ex) throws IOException {
         TarsServantResponse response = this.context.response();
         response.setRet(TarsHelper.SERVERUNKNOWNERR);
         response.setCause(ex);
         response.setResult(null);
         response.asyncCallEnd();
-
+        //降低流控指标
         getCapHomeSkeleton().postInvokeCapHomeSkeleton(context);
         Long startTime = this.context.getAttribute(Context.INTERNAL_START_TIME);
         TarsServantProcessor.printServiceFlowLog(flowLogger, this.context.request(), response.getRet(), (System.currentTimeMillis() - startTime.longValue()), ex.toString());
 
     }
 
+    // TODO: 17/5/22 by zmyer
     public void writeResult(Object result) throws IOException {
         TarsServantResponse response = this.context.response();
         response.setRet(TarsHelper.SERVERSUCCESS);

@@ -38,7 +38,8 @@ class ServantProxyFactory {
     }
 
     // TODO: 17/4/15 by zmyer
-    public <T> Object getServantProxy(Class<T> clazz, String objName, ServantProxyConfig servantProxyConfig,
+    public <T> Object getServantProxy(Class<T> clazz, String objName,
+        ServantProxyConfig servantProxyConfig,
         LoadBalance loadBalance, ProtocolInvoker<T> protocolInvoker) {
         //从缓存中读取代理对象
         Object proxy = cache.get(objName);
@@ -49,8 +50,9 @@ class ServantProxyFactory {
                 proxy = cache.get(objName);
                 if (proxy == null) {
                     //如果依旧为空,则直接创建
-                    ObjectProxy<T> objectProxy = communicator.getObjectProxyFactory().getObjectProxy(clazz,
-                        objName, servantProxyConfig, loadBalance, protocolInvoker);
+                    ObjectProxy<T> objectProxy = communicator.getObjectProxyFactory()
+                        .getObjectProxy(clazz, objName, servantProxyConfig, loadBalance,
+                            protocolInvoker);
                     //将新创建的代理对象,插入到缓存列表中
                     cache.putIfAbsent(objName, createProxy(clazz, objectProxy));
                     //在读取一次

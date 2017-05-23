@@ -16,15 +16,15 @@
 
 package com.qq.tars.support.om;
 
-import java.util.LinkedHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import com.qq.tars.client.Communicator;
 import com.qq.tars.server.config.ConfigurationManager;
 import com.qq.tars.server.config.ServantAdapterConfig;
 import com.qq.tars.server.config.ServerConfig;
 import com.qq.tars.support.stat.InvokeStatHelper;
+import java.util.LinkedHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+// TODO: 17/5/22 by zmyer
 public class ServerStatHelper {
 
     private static final ServerStatHelper instance = new ServerStatHelper();
@@ -35,20 +35,26 @@ public class ServerStatHelper {
     private ServerStatHelper() {
     }
 
+    // TODO: 17/5/22 by zmyer
     public static ServerStatHelper getInstance() {
         return instance;
     }
 
+    // TODO: 17/5/22 by zmyer
     public void init(Communicator communicator) {
         if (inited.compareAndSet(false, true)) {
             this.communicator = communicator;
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     public void report() {
         try {
+            //服务器配置
             ServerConfig serverConfig = ConfigurationManager.getInstance().getserverConfig();
-            LinkedHashMap<String, ServantAdapterConfig> adapterMap = serverConfig.getServantAdapterConfMap();
+            //服务适配配置
+            LinkedHashMap<String, ServantAdapterConfig> adapterMap =
+                serverConfig.getServantAdapterConfMap();
             if (adapterMap == null || adapterMap.isEmpty()) {
                 return;
             }
@@ -58,7 +64,9 @@ public class ServerStatHelper {
                     continue;
                 }
 
+                //读取服务适配配置信息
                 ServantAdapterConfig servantCfg = adapterEntry.getValue();
+                //开始发送相关统计信息
                 communicator.getStatHelper().report(InvokeStatHelper.getInstance().getProxyStat(servantCfg.getServant()));
             }
         } catch (Exception e) {

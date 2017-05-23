@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// TODO: 17/5/22 by zmyer
 public final class StatHelper {
 
     private final static int BATCH_REPORTS = 10;
@@ -36,17 +37,20 @@ public final class StatHelper {
         this.communicator = communicator;
     }
 
+    // TODO: 17/5/22 by zmyer
     private StatFPrx getPrx() {
         StatFPrx prx = null;
         String stat = communicator.getCommunicatorConfig().getStat();
         if (!StringUtils.isEmpty(stat)) {
-            prx = communicator.stringToProxy(StatFPrx.class, communicator.getCommunicatorConfig().getStat());
+            prx = communicator.stringToProxy(StatFPrx.class,
+                communicator.getCommunicatorConfig().getStat());
         }
         return prx;
     }
 
     // TODO: 17/4/18 by zmyer
     public void report(ProxyStat proxyStat) {
+        //获取统计信息代理对象
         StatFPrx statFProxy = getPrx();
         if (statFProxy == null) {
             ClientLogger.getLogger().info("no config stat obj to report");

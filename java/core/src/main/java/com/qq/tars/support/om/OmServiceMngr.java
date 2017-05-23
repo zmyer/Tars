@@ -47,16 +47,26 @@ public class OmServiceMngr {
 
     // TODO: 17/4/15 by zmyer
     public void initAndStartOmService() {
+        //获取通信对象
         Communicator communicator = CommunicatorFactory.getInstance().getCommunicator();
+        //获取应用名称
         String app = ConfigurationManager.getInstance().getserverConfig().getApplication();
+        //获取服务器名称
         String serverName = ConfigurationManager.getInstance().getserverConfig().getServerName();
+        //获取服务器根目录
         String basePath = ConfigurationManager.getInstance().getserverConfig().getBasePath();
-        String modualName = ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getModuleName();
-
+        //获取模块名称
+        String modualName = ConfigurationManager.getInstance().getserverConfig()
+            .getCommunicatorConfig().getModuleName();
+        //设置配置信息
         ConfigHelper.getInstance().setConfigInfo(communicator, app, serverName, basePath);
+        //设置节点信息
         NodeHelper.getInstance().setNodeInfo(communicator, app, serverName);
+        //设置公告信息
         NotifyHelper.getInstance().setNotifyInfo(communicator, app, serverName);
+        //设置通信对象模块名称
         PropertyReportHelper.getInstance().setPropertyInfo(communicator, modualName);
+        //通告版本
         NodeHelper.getInstance().reportVersion(ServerVersion.getVersion());
 
         Policy avgPolicy = new CommonPropertyPolicy.Avg();
@@ -71,12 +81,13 @@ public class OmServiceMngr {
             PropertyReportHelper.getInstance().createPropertyReporter(OmConstants.PropGcCount + gcMXBean.getName(), new GCNumCount(gcMXBean.getName()));
             PropertyReportHelper.getInstance().createPropertyReporter(OmConstants.PropGcTime + gcMXBean.getName(), new GCTimeSum(gcMXBean.getName()));
         }
-
+        //初始化统计对象
         ServerStatHelper.getInstance().init(communicator);
+        //启动调度服务
         ScheduledServiceMngr.getInstance().start();
     }
 
-    // TODO: 17/4/15 by zmyer
+    // TODO: 17/ 4/15 by zmyer
     public void reportWaitingTimeProperty(int value) {
         PropertyReportHelper.getInstance().reportPropertyValue(OmConstants.PropWaitTime, value);
     }

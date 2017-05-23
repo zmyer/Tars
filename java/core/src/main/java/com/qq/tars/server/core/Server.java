@@ -143,7 +143,9 @@ public class Server {
     // TODO: 17/4/15 by zmyer
     protected void startAppContainer() throws Exception {
         //读取main协议工厂对象
-        this.mainProtocolFactory = new TarsServantProtocolFactory(new TarsCodec(ConfigurationManager.getInstance().getserverConfig().getCharsetName()));
+        this.mainProtocolFactory =
+            new TarsServantProtocolFactory(new TarsCodec(ConfigurationManager
+            .getInstance().getserverConfig().getCharsetName()));
         //创建事件处理器对象
         this.processor = new ServantProcessor();
         //创建app容器对象
@@ -153,10 +155,13 @@ public class Server {
         //创建线程池分发对象
         this.threadPool = new ServerThreadPoolDispatcher();
         //创建main选择器管理器
-        this.mainSelectorManager = new SelectorManager(Utils.getSelectorPoolSize(), mainProtocolFactory,
-            threadPool, processor, keepAlive, "server-tcp-reactor", false);
+        this.mainSelectorManager = new SelectorManager(Utils.getSelectorPoolSize(),
+            mainProtocolFactory,
+            threadPool, processor,
+            keepAlive, "server-tcp-reactor", false);
         //设置非延时标记
-        this.mainSelectorManager.setTcpNoDelay(ConfigurationManager.getInstance().getserverConfig().isTcpNoDelay());
+        this.mainSelectorManager.setTcpNoDelay(ConfigurationManager.getInstance()
+            .getserverConfig().isTcpNoDelay());
         //启动容器
         this.container.start();
     }
@@ -298,7 +303,6 @@ public class Server {
             tcpSelectorManager.getReactor(0).registerChannel(serverChannel, SelectionKey.OP_ACCEPT, null);
             System.out.println("[SERVER] server started at " + ip + " on ext TCP port " + String.valueOf(tcpPort) + "...");
         }
-
     }
 
     // TODO: 17/4/13 by zmyer

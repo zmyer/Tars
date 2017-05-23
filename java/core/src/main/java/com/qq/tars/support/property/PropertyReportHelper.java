@@ -143,6 +143,7 @@ public class PropertyReportHelper {
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     public void reportPropertyValue(String propRptName, int value) {
         PropertyReporter reporter = reporters.get(propRptName);
         if (reporter == null) {
@@ -158,13 +159,16 @@ public class PropertyReportHelper {
             if (!configed) {
                 return;
             }
-
+            //创建属性代理对象
             PropertyFPrx propertyFPrx = communicator.stringToProxy(PropertyFPrx.class,
                 ConfigurationManager.getInstance().getserverConfig().getCommunicatorConfig().getProperty());
 
+            //发送信息映射表
             Map<StatPropMsgHead, StatPropMsgBody> sendData = new HashMap<StatPropMsgHead, StatPropMsgBody>();
             int sendLen = 0;
+
             for (PropertyReporter reporter : reporters.values()) {
+                //待发送的信息对象
                 ReportData data = reporter.getReportData();
                 if (sendLen + data.len <= MAX_REPORT_SIZE) {
                     sendData.put(data.head, data.body);
@@ -178,6 +182,7 @@ public class PropertyReportHelper {
             }
 
             if (sendData.size() != 0) {
+                //异步发送消息
                 propertyFPrx.async_reportPropMsg(null, sendData);
             }
         } catch (Throwable t) {

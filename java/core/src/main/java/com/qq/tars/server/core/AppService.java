@@ -16,6 +16,7 @@
 
 package com.qq.tars.server.core;
 
+// TODO: 17/5/22 by zmyer
 public abstract class AppService {
 
     public abstract AppContext getAppContext();

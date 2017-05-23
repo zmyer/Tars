@@ -33,18 +33,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO: 17/4/15 by zmyer
 public class DefaultLoadBalance implements LoadBalance {
-
+    //序列号
     private final AtomicInteger sequence = new AtomicInteger();
+    //服务代理配置对象
     private volatile ServantProxyConfig config;
 
+    //调度比较函数
     private final InvokerComparator comparator = new InvokerComparator();
 
+    // TODO: 17/5/22 by zmyer
     public DefaultLoadBalance(ServantProxyConfig config) {
         this.config = config;
     }
 
     // TODO: 17/4/18 by zmyer
-    public <T> Invoker<T> select(Collection<Invoker<T>> invokers, InvokeContext context) throws NoInvokerException {
+    public <T> Invoker<T> select(Collection<Invoker<T>> invokers, InvokeContext context)
+        throws NoInvokerException {
         if (ClientLogger.getLogger().isDebugEnabled()) {
             ClientLogger.getLogger().debug(config.getSimpleObjectName() + " try to select active invoker, size=" + (invokers == null || invokers.isEmpty() ? 0 : invokers.size()));
         }

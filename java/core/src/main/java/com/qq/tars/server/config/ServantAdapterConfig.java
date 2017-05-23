@@ -30,6 +30,7 @@ public class ServantAdapterConfig {
     private String protocol = "tars";
     private int threads = 1;
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig load(Config conf, String adapterName) {
         String path = "/tars/application/server/" + adapterName;
         endpoint = Endpoint.parseString(conf.get(path + "<endpoint>"));
@@ -42,64 +43,78 @@ public class ServantAdapterConfig {
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public Endpoint getEndpoint() {
         return endpoint;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setEndpoint(Endpoint endpoint) {
         this.endpoint = endpoint;
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public int getMaxConns() {
         return maxConns;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setMaxConns(int maxConns) {
         this.maxConns = maxConns;
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public int getQueueCap() {
         return queueCap;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setQueueCap(int queueCap) {
         this.queueCap = queueCap;
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public int getQueueTimeout() {
         return queueTimeout;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setQueueTimeout(int queueTimeout) {
         this.queueTimeout = queueTimeout;
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public String getServant() {
         return servant;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setServant(String servant) {
         this.servant = servant;
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public int getThreads() {
         return threads;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setThreads(int threads) {
         this.threads = threads;
         return this;
     }
 
+    // TODO: 17/5/22 by zmyer
     public String getProtocol() {
         return protocol;
     }
 
+    // TODO: 17/5/22 by zmyer
     public ServantAdapterConfig setProtocol(String protocol) {
         this.protocol = protocol;
         return this;

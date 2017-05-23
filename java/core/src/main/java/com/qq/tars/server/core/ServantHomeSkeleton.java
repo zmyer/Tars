@@ -16,12 +16,11 @@
 
 package com.qq.tars.server.core;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.qq.tars.rpc.protocol.tars.TarsServantRequest;
 import com.qq.tars.rpc.protocol.tars.TarsServantResponse;
 import com.qq.tars.server.apps.AppContextImpl;
+import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 // TODO: 17/4/15 by zmyer
 public class ServantHomeSkeleton extends AppService {
@@ -64,22 +63,8 @@ public class ServantHomeSkeleton extends AppService {
         try {
             //读取当前线程的执行上下文对象
             context = ContextManager.getContext();
-            //服务调用前准备
+            //服务调用前准备,主要是为了流控
             preInvokeCapHomeSkeleton(context);
-
-//            if ("isAlive".equals(methodName) && method == null && (args == null || args.length == 0)) {
-//                return Boolean.TRUE;
-//            }
-
-//            if (method == null) throw new RuntimeException("The serivce has no method named:" + methodName);
-
-//            if (!enableOverload || methodID == 0) { // 服务器或客户端不支持重载
-//                if (!badMethodMap.isEmpty() && badMethodMap.containsKey(method.getName())) {
-//                    String x = enableOverload ? "client side's taserver-proxy too old, update it to fix this problem."//
-//                    : "only TAS protocol support Method Overload, " + "remove @Service annotation to diable NONE TAS protocols and then Method Overload will be enabled automatically.";
-//                    throw new UnsupportedOperationException("Method Overload Not Supported( " + x + "), method=" + methodName);
-//                }
-//            }
             //开始进行rpc调用
             value = method.invoke(this.service, fixParamValueType(method, args));
         } finally {
@@ -88,17 +73,22 @@ public class ServantHomeSkeleton extends AppService {
                 postInvokeCapHomeSkeleton(context);
             }
         }
+        //返回值
         return value;
     }
 
     // TODO: 17/4/15 by zmyer
     private Object[] fixParamValueType(Method method, Object args[]) {
-        if (args == null || args.length == 0) return args;
+        if (args == null || args.length == 0)
+            return args;
         //读取参数类型列表
         Class<?> parameterTypes[] = method.getParameterTypes();
-        if (parameterTypes == null || parameterTypes.length == 0) return args;
+        if (parameterTypes == null || parameterTypes.length == 0)
+            return args;
 
-        if (args.length != parameterTypes.length) return args;
+        //参数数目不对
+        if (args.length != parameterTypes.length)
+            return args;
 
         for (int i = 0; i < parameterTypes.length; i++) {
             //填充参数集合
@@ -109,17 +99,17 @@ public class ServantHomeSkeleton extends AppService {
     }
 
     // TODO: 17/4/15 by zmyer
-    private final Object fixValueDataType(Class<?> dataType, Object value) {
+    private Object fixValueDataType(Class<?> dataType, Object value) {
         Object dataValue = value;
 
         if (dataType != null && dataValue != null) {
-            if ("short" == dataType.getName()) {
+            if ("short".equals(dataType.getName())) {
                 dataValue = Short.valueOf(dataValue.toString());
-            } else if ("byte" == dataType.getName()) {
+            } else if ("byte".equals(dataType.getName())) {
                 dataValue = Byte.valueOf(dataValue.toString());
             } else if (char.class == dataType) {
                 dataValue = ((String) value).charAt(0);
-            } else if ("float" == dataType.getName()) {
+            } else if ("float".equals(dataType.getName())) {
                 dataValue = Float.valueOf(dataValue.toString());
             }
         }
@@ -129,10 +119,13 @@ public class ServantHomeSkeleton extends AppService {
 
     // TODO: 17/4/15 by zmyer
     public void preInvokeCapHomeSkeleton(Context<TarsServantRequest, TarsServantResponse> context) {
+        //没有流控,直接返回
         if (this.maxLoadLimit == -1) {
             return;
         }
+        //递增调用计数
         this.invokeNumbers.incrementAndGet();
+        //流控
         if (this.invokeNumbers.intValue() > this.maxLoadLimit) {
             throw new RuntimeException(this.name + " is overload. limit=" + this.maxLoadLimit);
         }
@@ -140,9 +133,11 @@ public class ServantHomeSkeleton extends AppService {
 
     // TODO: 17/4/15 by zmyer
     public void postInvokeCapHomeSkeleton(Context<TarsServantRequest, ?> context) {
+        //没有流控,直接返回
         if (this.maxLoadLimit == -1) {
             return;
         }
+        //调用完毕,需要递减调用次数
         this.invokeNumbers.decrementAndGet();
     }
 

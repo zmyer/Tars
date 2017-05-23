@@ -16,6 +16,7 @@
 
 package com.qq.tars.support.stat;
 
+import com.qq.tars.common.util.Constants;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,8 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import com.qq.tars.common.util.Constants;
-
+// TODO: 17/5/22 by zmyer
 public class ProxyStatBody {
 
     private AtomicInteger count = new AtomicInteger();
@@ -36,15 +36,18 @@ public class ProxyStatBody {
     private AtomicInteger maxRspTime = new AtomicInteger();
     private AtomicInteger minRspTime = new AtomicInteger();
 
-    public ConcurrentHashMap<Integer, AtomicInteger> intervalCount = new ConcurrentHashMap<Integer, AtomicInteger>();
+    public ConcurrentHashMap<Integer, AtomicInteger> intervalCount =
+        new ConcurrentHashMap<Integer, AtomicInteger>();
 
     ReentrantReadWriteLock intervListlock = new ReentrantReadWriteLock();
     CopyOnWriteArrayList<Integer> timeStatInterval = new CopyOnWriteArrayList<Integer>();
 
+    // TODO: 17/5/22 by zmyer
     public ProxyStatBody(List<Integer> interval) {
         setTimeStatInterval(interval);
     }
 
+    // TODO: 17/5/22 by zmyer
     public void setTimeStatInterval(List<Integer> interval) {
         timeStatInterval.clear();
         timeStatInterval.addAll(interval);
@@ -55,6 +58,7 @@ public class ProxyStatBody {
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     public void onCallFinished(long costTime, int callStatus) {
         if (callStatus == Constants.INVOKE_STATUS_SUCC) {
             count.incrementAndGet();
@@ -69,14 +73,15 @@ public class ProxyStatBody {
         } else if (callStatus == Constants.INVOKE_STATUS_TIMEOUT) {
             timeoutCount.incrementAndGet();
         }
-        for (int i = 0; i < timeStatInterval.size(); i++) {
-            if (costTime <= timeStatInterval.get(i)) {
-                intervalCount.get(timeStatInterval.get(i)).incrementAndGet();
+        for (Integer aTimeStatInterval : timeStatInterval) {
+            if (costTime <= aTimeStatInterval) {
+                intervalCount.get(aTimeStatInterval).incrementAndGet();
                 break;
             }
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     public Object clone() {
         Object o = null;
         try {
@@ -87,6 +92,7 @@ public class ProxyStatBody {
         return o;
     }
 
+    // TODO: 17/5/22 by zmyer
     public void clear() {
         count.set(0);
         execCount.set(0);

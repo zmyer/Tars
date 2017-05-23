@@ -16,6 +16,7 @@
 
 package com.qq.tars.support.config;
 
+// TODO: 17/5/22 by zmyer
 public interface UpdateConfigCallback {
 
     boolean update(String configFileName);

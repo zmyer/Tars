@@ -16,22 +16,24 @@
 
 package com.qq.tars.common.support;
 
+// TODO: 17/5/22 by zmyer
 public class Endpoint {
 
     private final String type;
-    private final String host; 
-    private final int port; 
+    private final String host;
+    private final int port;
 
     private final int timeout;
-    private final int grid; 
-    private final int qos; 
-    private final String setDivision; 
+    private final int grid;
+    private final int qos;
+    private final String setDivision;
 
-    private int hash; 
+    private int hash;
 
     public static final Endpoint VOID_ENDPOINT = new Endpoint("tcp", "0.0.0.0", 0, 0, 0, 0, null);
 
-    public Endpoint(String type, String host, int port, int timeout, int grid, int qos, String setDivision) {
+    public Endpoint(String type, String host, int port, int timeout, int grid, int qos,
+        String setDivision) {
         this.type = type;
         this.host = host;
         this.port = port;
@@ -84,15 +86,22 @@ public class Endpoint {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
         Endpoint other = (Endpoint) obj;
         if (host == null) {
-            if (other.host != null) return false;
-        } else if (!host.equals(other.host)) return false;
-        if (port != other.port) return false;
-        if (type != other.type) return false;
+            if (other.host != null)
+                return false;
+        } else if (!host.equals(other.host))
+            return false;
+        if (port != other.port)
+            return false;
+        if (type != other.type)
+            return false;
         return true;
     }
 

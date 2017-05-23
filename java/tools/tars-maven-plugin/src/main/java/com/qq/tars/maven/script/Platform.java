@@ -15,17 +15,15 @@
  */
 package com.qq.tars.maven.script;
 
+import com.qq.tars.maven.model.ClasspathElement;
+import com.qq.tars.maven.model.Dependency;
+import com.qq.tars.maven.model.Directory;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.codehaus.plexus.util.StringUtils;
-
-import com.qq.tars.maven.model.ClasspathElement;
-import com.qq.tars.maven.model.Dependency;
-import com.qq.tars.maven.model.Directory;
 
 public class Platform {
 
@@ -80,7 +78,8 @@ public class Platform {
         return getPlatformSet(platformList, new HashSet<Platform>(ALL_PLATFORMS.values()));
     }
 
-    public static Set<Platform> getPlatformSet(List<String> platformList, Set<Platform> allSet) throws Exception {
+    public static Set<Platform> getPlatformSet(List<String> platformList,
+        Set<Platform> allSet) throws Exception {
         if (platformList == null) {
             return allSet;
         }

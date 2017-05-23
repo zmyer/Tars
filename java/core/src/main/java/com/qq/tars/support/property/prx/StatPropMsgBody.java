@@ -20,65 +20,67 @@
 
 package com.qq.tars.support.property.prx;
 
-import com.qq.tars.protocol.util.*;
-import com.qq.tars.protocol.annotation.*;
-import com.qq.tars.protocol.tars.*;
-import com.qq.tars.protocol.tars.annotation.*;
+import com.qq.tars.protocol.tars.TarsInputStream;
+import com.qq.tars.protocol.tars.TarsOutputStream;
+import com.qq.tars.protocol.tars.annotation.TarsStruct;
+import com.qq.tars.protocol.tars.annotation.TarsStructProperty;
+import com.qq.tars.protocol.util.TarsUtil;
 
+// TODO: 17/5/22 by zmyer
 @TarsStruct
 public class StatPropMsgBody {
 
-	@TarsStructProperty(order = 0, isRequire = true)
-	public java.util.List<StatPropInfo> vInfo = null;
+    @TarsStructProperty(order = 0, isRequire = true)
+    public java.util.List<StatPropInfo> vInfo = null;
 
-	public java.util.List<StatPropInfo> getVInfo() {
-		return vInfo;
-	}
+    public java.util.List<StatPropInfo> getVInfo() {
+        return vInfo;
+    }
 
-	public void setVInfo(java.util.List<StatPropInfo> vInfo) {
-		this.vInfo = vInfo;
-	}
+    public void setVInfo(java.util.List<StatPropInfo> vInfo) {
+        this.vInfo = vInfo;
+    }
 
-	public StatPropMsgBody() {
-	}
+    public StatPropMsgBody() {
+    }
 
-	public StatPropMsgBody(java.util.List<StatPropInfo> vInfo) {
-		this.vInfo = vInfo;
-	}
+    public StatPropMsgBody(java.util.List<StatPropInfo> vInfo) {
+        this.vInfo = vInfo;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + TarsUtil.hashCode(vInfo);
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + TarsUtil.hashCode(vInfo);
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof StatPropMsgBody)) {
-			return false;
-		}
-		StatPropMsgBody other = (StatPropMsgBody) obj;
-		return (
-			TarsUtil.equals(vInfo, other.vInfo) 
-		);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof StatPropMsgBody)) {
+            return false;
+        }
+        StatPropMsgBody other = (StatPropMsgBody) obj;
+        return (
+            TarsUtil.equals(vInfo, other.vInfo)
+        );
+    }
 
-	public void writeTo(TarsOutputStream _os) {
-		if (null != vInfo) {
-			_os.write(vInfo, 0);
-		}
-	}
+    public void writeTo(TarsOutputStream _os) {
+        if (null != vInfo) {
+            _os.write(vInfo, 0);
+        }
+    }
 
-	public void readFrom(TarsInputStream _is) {
-		this.vInfo = (java.util.List<StatPropInfo>) _is.read(vInfo, 0, true);
-	}
+    public void readFrom(TarsInputStream _is) {
+        this.vInfo = (java.util.List<StatPropInfo>) _is.read(vInfo, 0, true);
+    }
 
 }

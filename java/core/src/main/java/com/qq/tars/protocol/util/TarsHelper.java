@@ -16,21 +16,6 @@
 
 package com.qq.tars.protocol.util;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.qq.tars.common.support.Holder;
 import com.qq.tars.common.util.BeanAccessor;
 import com.qq.tars.common.util.CommonUtils;
@@ -46,7 +31,22 @@ import com.qq.tars.protocol.tars.support.TarsMethodInfo;
 import com.qq.tars.protocol.tars.support.TarsMethodParameterInfo;
 import com.qq.tars.protocol.tars.support.TarsStructInfo;
 import com.qq.tars.protocol.tars.support.TarsStrutPropertyInfo;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+// TODO: 17/5/22 by zmyer
 public class TarsHelper {
 
     public final static int PACKAGE_MAX_LENGTH = 10 * 1024 * 1024;
@@ -105,13 +105,13 @@ public class TarsHelper {
     public static final Double STAMP_DOUBLE = Double.valueOf(0);
     public static final String STAMP_STRING = "";
 
-    public static final boolean[] STAMP_BOOLEAN_ARRAY = new boolean[] { true };
-    public static final byte[] STAMP_BYTE_ARRAY = new byte[] { 0 };
-    public static final short[] STAMP_SHORT_ARRAY = new short[] { 0 };
-    public static final int[] STAMP_INT_ARRAY = new int[] { 0 };
-    public static final long[] STAMP_LONG_ARRAY = new long[] { 0 };
-    public static final float[] STAMP_FLOAT_ARRAY = new float[] { 0 };
-    public static final double[] STAMP_DOUBLE_ARRAY = new double[] { 0 };
+    public static final boolean[] STAMP_BOOLEAN_ARRAY = new boolean[] {true};
+    public static final byte[] STAMP_BYTE_ARRAY = new byte[] {0};
+    public static final short[] STAMP_SHORT_ARRAY = new short[] {0};
+    public static final int[] STAMP_INT_ARRAY = new int[] {0};
+    public static final long[] STAMP_LONG_ARRAY = new long[] {0};
+    public static final float[] STAMP_FLOAT_ARRAY = new float[] {0};
+    public static final double[] STAMP_DOUBLE_ARRAY = new double[] {0};
     public static final Map<String, String> STAMP_MAP = new HashMap<String, String>();
 
     static {
@@ -266,7 +266,8 @@ public class TarsHelper {
                         List<Field> fieldList = new ArrayList<Field>(fields.length);
 
                         for (Field field : fields) {
-                            if (field.isAnnotationPresent(TarsStructProperty.class)) fieldList.add(field);
+                            if (field.isAnnotationPresent(TarsStructProperty.class))
+                                fieldList.add(field);
                         }
 
                         try {

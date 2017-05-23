@@ -17,7 +17,6 @@ package com.qq.tars.maven.util;
 
 import java.io.File;
 import java.lang.reflect.Method;
-
 import org.apache.maven.plugin.logging.Log;
 import org.codehaus.plexus.archiver.ArchiverException;
 import org.codehaus.plexus.util.Os;
@@ -31,15 +30,16 @@ public final class ArchiveEntryUtils {
 
     static {
         try {
-            jvmFilePermAvailable = File.class.getMethod("setReadable", new Class[] { Boolean.TYPE }) != null;
-        } catch (final Exception e) {
+            jvmFilePermAvailable = File.class.getMethod("setReadable", Boolean.TYPE) != null;
+        } catch (final Exception ignored) {
         }
     }
 
     private ArchiveEntryUtils() {
     }
 
-    public static void chmod(final File file, final int mode, final Log logger, boolean useJvmChmod) throws ArchiverException {
+    public static void chmod(final File file, final int mode, final Log logger,
+        boolean useJvmChmod) throws ArchiverException {
         if (!Os.isFamily(Os.FAMILY_UNIX)) {
             return;
         }
@@ -98,24 +98,26 @@ public final class ArchiveEntryUtils {
 
     }
 
-    public static void chmod(final File file, final int mode, final Log logger) throws ArchiverException {
+    public static void chmod(final File file, final int mode,
+        final Log logger) throws ArchiverException {
         chmod(file, mode, logger, Boolean.getBoolean("useJvmChmod") && jvmFilePermAvailable);
     }
 
-    public static void applyPermissionsWithJvm(final File file, final String mode, final Log logger) {
+    public static void applyPermissionsWithJvm(final File file, final String mode,
+        final Log logger) {
         final FilePermission filePermission = FilePermissionUtils.getFilePermissionFromMode(mode, logger);
 
         Method method;
         try {
-            method = File.class.getMethod("setReadable", new Class[] { Boolean.TYPE, Boolean.TYPE });
+            method = File.class.getMethod("setReadable", new Class[] {Boolean.TYPE, Boolean.TYPE});
 
-            method.invoke(file, new Object[] { Boolean.valueOf(filePermission.isReadable()), Boolean.valueOf(filePermission.isOwnerOnlyReadable()) });
+            method.invoke(file, new Object[] {Boolean.valueOf(filePermission.isReadable()), Boolean.valueOf(filePermission.isOwnerOnlyReadable())});
 
-            method = File.class.getMethod("setExecutable", new Class[] { Boolean.TYPE, Boolean.TYPE });
-            method.invoke(file, new Object[] { Boolean.valueOf(filePermission.isExecutable()), Boolean.valueOf(filePermission.isOwnerOnlyExecutable()) });
+            method = File.class.getMethod("setExecutable", new Class[] {Boolean.TYPE, Boolean.TYPE});
+            method.invoke(file, new Object[] {Boolean.valueOf(filePermission.isExecutable()), Boolean.valueOf(filePermission.isOwnerOnlyExecutable())});
 
-            method = File.class.getMethod("setWritable", new Class[] { Boolean.TYPE, Boolean.TYPE });
-            method.invoke(file, new Object[] { Boolean.valueOf(filePermission.isWritable()), Boolean.valueOf(filePermission.isOwnerOnlyWritable()) });
+            method = File.class.getMethod("setWritable", new Class[] {Boolean.TYPE, Boolean.TYPE});
+            method.invoke(file, new Object[] {Boolean.valueOf(filePermission.isWritable()), Boolean.valueOf(filePermission.isOwnerOnlyWritable())});
         } catch (final Exception e) {
             logger.error("error calling dynamically file permissons with jvm " + e.getMessage(), e);
             throw new RuntimeException("error calling dynamically file permissons with jvm " + e.getMessage(), e);

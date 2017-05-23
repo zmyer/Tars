@@ -203,7 +203,8 @@ public class TCPSession extends Session {
     public void write(Request request) throws IOException {
         try {
             //编码请求对象
-            IoBuffer buffer = selectorManager.getProtocolFactory().getEncoder().encodeRequest(request, this);
+            IoBuffer buffer = selectorManager.getProtocolFactory().getEncoder()
+                .encodeRequest(request, this);
             //写入请求对象
             write(buffer);
         } catch (ProtocolException ex) {
@@ -215,7 +216,8 @@ public class TCPSession extends Session {
     public void write(Response response) throws IOException {
         try {
             //编码应答消息
-            IoBuffer buffer = selectorManager.getProtocolFactory().getEncoder().encodeResponse(response, this);
+            IoBuffer buffer = selectorManager.getProtocolFactory().getEncoder()
+                .encodeResponse(response, this);
             //写入应答消息
             write(buffer);
         } catch (ProtocolException ex) {

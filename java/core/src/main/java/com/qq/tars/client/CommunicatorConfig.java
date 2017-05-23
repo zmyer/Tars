@@ -95,12 +95,14 @@ public class CommunicatorConfig {
         return this;
     }
 
-    public static CommunicatorConfig load(String confFile) throws FileNotFoundException, IOException {
+    public static CommunicatorConfig load(
+        String confFile) throws FileNotFoundException, IOException {
         CommunicatorConfig cfg = new CommunicatorConfig();
         cfg.load(Config.parseFile(confFile));
         return cfg;
     }
 
+    // TODO: 17/5/22 by zmyer
     public String getLocator() {
         return locator;
     }

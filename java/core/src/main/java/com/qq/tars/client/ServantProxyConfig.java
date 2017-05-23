@@ -182,6 +182,7 @@ public final class ServantProxyConfig {
         }
     }
 
+    // TODO: 17/5/22 by zmyer
     public int getCheckInterval() {
         return checkInterval;
     }

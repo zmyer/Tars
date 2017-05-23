@@ -46,14 +46,17 @@ public final class SelectorManager {
     private boolean isTcpNoDelay = false;
 
     // TODO: 17/4/13 by zmyer
-    public SelectorManager(int selectorPoolSize, ProtocolFactory protocolFactory, Executor threadPool,
+    public SelectorManager(int selectorPoolSize, ProtocolFactory protocolFactory,
+        Executor threadPool,
         Processor processor, boolean keepAlive, String reactorNamePrefix) throws IOException {
         this(selectorPoolSize, protocolFactory, threadPool, processor, keepAlive, reactorNamePrefix, false);
     }
 
     // TODO: 17/4/13 by zmyer
-    public SelectorManager(int selectorPoolSize, ProtocolFactory protocolFactory, Executor threadPool,
-        Processor processor, boolean keepAlive, String reactorNamePrefix, boolean udpMode) throws IOException {
+    public SelectorManager(int selectorPoolSize, ProtocolFactory protocolFactory,
+        Executor threadPool,
+        Processor processor, boolean keepAlive, String reactorNamePrefix,
+        boolean udpMode) throws IOException {
         //如果是udp,则select池中的为1
         if (udpMode)
             selectorPoolSize = 1;
@@ -69,18 +72,22 @@ public final class SelectorManager {
 
         for (int i = 0; i < reactorSet.length; i++) {
             //创建reactor对象
-            reactorSet[i] = new Reactor(this, reactorNamePrefix + "-" + protocolFactory.getClass().getSimpleName().toLowerCase() + "-" + String.valueOf(i), udpMode);
+            reactorSet[i] = new Reactor(this, reactorNamePrefix + "-" + protocolFactory.getClass()
+                .getSimpleName().toLowerCase() + "-" + String.valueOf(i), udpMode);
         }
     }
 
     // TODO: 17/4/13 by zmyer
     public synchronized void start() {
+        //如果当前的选择器管理对象已经启动过了则直接退出
         if (this.started) {
             return;
         }
 
+        //设置启动标记
         this.started = true;
         for (Reactor reactor : this.reactorSet) {
+            //依次启动每个reactor对象
             reactor.start();
         }
     }

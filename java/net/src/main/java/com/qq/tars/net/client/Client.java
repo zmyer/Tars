@@ -16,6 +16,17 @@
 
 package com.qq.tars.net.client;
 
+import com.qq.tars.net.client.ticket.Ticket;
+import com.qq.tars.net.client.ticket.TicketManager;
+import com.qq.tars.net.core.Request;
+import com.qq.tars.net.core.Request.InvokeStatus;
+import com.qq.tars.net.core.Response;
+import com.qq.tars.net.core.Session;
+import com.qq.tars.net.core.Session.SessionStatus;
+import com.qq.tars.net.core.nio.SelectorManager;
+import com.qq.tars.net.core.nio.TCPSession;
+import com.qq.tars.net.core.nio.UDPSession;
+import com.qq.tars.net.protocol.ProtocolFactory;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
@@ -29,18 +40,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.qq.tars.net.client.ticket.Ticket;
-import com.qq.tars.net.client.ticket.TicketManager;
-import com.qq.tars.net.core.Request;
-import com.qq.tars.net.core.Response;
-import com.qq.tars.net.core.Session;
-import com.qq.tars.net.core.Request.InvokeStatus;
-import com.qq.tars.net.core.Session.SessionStatus;
-import com.qq.tars.net.core.nio.SelectorManager;
-import com.qq.tars.net.core.nio.TCPSession;
-import com.qq.tars.net.core.nio.UDPSession;
-import com.qq.tars.net.protocol.ProtocolFactory;
 
 public final class Client<REQ extends Request, RES extends Response> {
 
@@ -86,8 +85,9 @@ public final class Client<REQ extends Request, RES extends Response> {
         this(ip, port, protocolFactory, null, udpMode);
     }
 
-    public Client(String ip, int port, ProtocolFactory protocolFactory, ThreadPoolExecutor threadPoolExecutor,
-                  boolean udpMode) {
+    public Client(String ip, int port, ProtocolFactory protocolFactory,
+        ThreadPoolExecutor threadPoolExecutor,
+        boolean udpMode) {
         try {
             this.host = ip;
             this.port = port;
@@ -100,7 +100,8 @@ public final class Client<REQ extends Request, RES extends Response> {
     }
 
     protected void ensureConnected() throws IOException {
-        if (isNotConnected()) reConnect();
+        if (isNotConnected())
+            reConnect();
     }
 
     protected synchronized void reConnect() throws IOException {
@@ -127,7 +128,8 @@ public final class Client<REQ extends Request, RES extends Response> {
                 channel = SocketChannel.open();
                 channel.configureBlocking(false);
                 try {
-                    if (this.tc != INVALID_TRAFFIC_CLASS_VALUE) ((SocketChannel) channel).socket().setTrafficClass(this.tc);
+                    if (this.tc != INVALID_TRAFFIC_CLASS_VALUE)
+                        ((SocketChannel) channel).socket().setTrafficClass(this.tc);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -187,12 +189,14 @@ public final class Client<REQ extends Request, RES extends Response> {
                 }
             }
             response = ticket.response();
-            if (response == null) throw new IOException("The operation is failed.");
+            if (response == null)
+                throw new IOException("The operation is failed.");
             return response;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            if (ticket != null) TicketManager.removeTicket(ticket.getTicketNumber());
+            if (ticket != null)
+                TicketManager.removeTicket(ticket.getTicketNumber());
         }
 
         return response;
@@ -207,7 +211,8 @@ public final class Client<REQ extends Request, RES extends Response> {
             ticket = TicketManager.createTicket(request, session, this.getReadTimeout(), callback);
             session.write(request);
         } catch (Exception ex) {
-            if (ticket != null) TicketManager.removeTicket(ticket.getTicketNumber());
+            if (ticket != null)
+                TicketManager.removeTicket(ticket.getTicketNumber());
             throw new IOException("invokeWithAsync error:", ex);
         }
     }
@@ -223,7 +228,8 @@ public final class Client<REQ extends Request, RES extends Response> {
             session.write(request);
             return new FutureImpl(ticket);
         } catch (IOException ex) {
-            if (ticket != null) TicketManager.removeTicket(ticket.getTicketNumber());
+            if (ticket != null)
+                TicketManager.removeTicket(ticket.getTicketNumber());
             throw ex;
         }
     }
@@ -293,7 +299,8 @@ public final class Client<REQ extends Request, RES extends Response> {
         return false;
     }
 
-    private SelectorManager initSelectorManager(ProtocolFactory protocolFactory, ThreadPoolExecutor threadPoolExecutor) throws IOException {
+    private SelectorManager initSelectorManager(ProtocolFactory protocolFactory,
+        ThreadPoolExecutor threadPoolExecutor) throws IOException {
         String protocolFactoryName = resolveProtocolFactoryName(protocolFactory);
         String currentContextIdentity = resolveCurrentContextIdentity();
         String key = protocolFactoryName + "-" + currentContextIdentity;

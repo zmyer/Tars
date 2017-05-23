@@ -16,15 +16,21 @@
 
 package com.qq.tars.client;
 
+// TODO: 17/5/22 by zmyer
 public interface ServantProxy {
 
+    // TODO: 17/5/22 by zmyer
     public Class<?> getApi();
 
+    // TODO: 17/5/22 by zmyer
     public String getObjectName();
 
+    // TODO: 17/5/22 by zmyer
     public void refresh();
 
+    // TODO: 17/5/22 by zmyer
     public void destroy();
 
+    // TODO: 17/5/22 by zmyer
     public ServantProxyConfig getConfig();
 }

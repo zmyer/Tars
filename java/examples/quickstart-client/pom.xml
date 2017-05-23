@@ -18,6 +18,11 @@
 			<artifactId>tars-client</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>qq-cloud-central</groupId>
+			<artifactId>tars-core</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>webapp</finalName>
